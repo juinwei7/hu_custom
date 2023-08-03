@@ -35,7 +35,6 @@ public class Piglin_Dorp implements Listener {
 
 
         if(e.getEntityType()==EntityType.SNOWBALL){
-            Bukkit.getLogger().info("清除雪球");
             e.getEntity().remove();
         }
     }

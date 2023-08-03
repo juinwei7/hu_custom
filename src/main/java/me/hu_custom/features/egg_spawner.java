@@ -7,12 +7,9 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.SpawnerSpawnEvent;
-import org.bukkit.util.BoundingBox;
-import sun.jvm.hotspot.ui.ObjectHistogramPanel;
 
 import java.util.ArrayList;
 import java.util.Collection;

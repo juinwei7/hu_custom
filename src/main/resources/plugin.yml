@@ -12,4 +12,7 @@ commands:
   Item_get:
     aliases:
       - huget
+  mry:
+    aliases:
+      - mry
 
