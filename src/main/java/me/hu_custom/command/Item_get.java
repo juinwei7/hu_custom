@@ -2,6 +2,7 @@ package me.hu_custom.command;
 
 import me.hu_custom.Main;
 import me.hu_custom.item.custom_item;
+import me.hu_custom.util.Config;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -25,7 +26,7 @@ public class Item_get implements CommandExecutor {
             String a = args[0];
             switch (a) {
                 case "clock":
-                    if(Main.clock_enabled){
+                    if(Config.isClock()){
                     p.getInventory().addItem(im_mu);
                     p.updateInventory();
                     break;}

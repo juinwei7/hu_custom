@@ -2,6 +2,7 @@ package me.hu_custom.features;
 
 import de.tr7zw.nbtapi.NBTItem;
 import me.hu_custom.Main;
+import me.hu_custom.util.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -29,10 +30,11 @@ public class err_up_equipment implements Listener {
             if (resultItem != null) {
                 if (resultItem0 != null) {
                     ItemMeta item = resultItem.getItemMeta();
+                    String message = Config.getConfig().getString(Config.prefix + Config.smithing_table_message);
                     if (item.hasLore()) {
                         event.setCancelled(true);
                         event.getWhoClicked().closeInventory();
-                        event.getWhoClicked().sendMessage(Main.prefix + Main.smithing_table_message);
+                        event.getWhoClicked().sendMessage(message);
                         //Bukkit.getLogger().info(resultItem.getItemMeta().getDisplayName());
                     }
                 }
@@ -52,10 +54,11 @@ public class err_up_equipment implements Listener {
                     NBTItem nbt = new NBTItem(item);
                     if (nbt.hasKey("BindStatus")) {
                         String nbtst = nbt.getString("BindStatus");
+                        String message = Config.getConfig().getString(Config.prefix + Config.Book_BindStatus);
                         if (!nbtst.equals(playerUUID)) {
                             event.setCancelled(true);
                             event.getWhoClicked().closeInventory();
-                            event.getWhoClicked().sendMessage(Main.prefix + Main.Book_BindStatus);
+                            event.getWhoClicked().sendMessage(message);
                             return;
                         }
                     }
@@ -67,10 +70,11 @@ public class err_up_equipment implements Listener {
                     NBTItem nbti = new NBTItem(resultItem0);
                     if(nbti.hasKey("BindStatus")) {
                         String nbtst = nbti.getString("BindStatus");
+                        String message = Config.getConfig().getString(Config.prefix + Config.Map_BindStatus);
                         if (!nbtst.equals(playerUUID)) {
                             event.setCancelled(true);
                             event.getWhoClicked().closeInventory();
-                            event.getWhoClicked().sendMessage(Main.prefix + Main.Map_BindStatus);
+                            event.getWhoClicked().sendMessage(message);
                             //Bukkit.getLogger().info(resultItem.getItemMeta().getDisplayName());
                         }
                     }

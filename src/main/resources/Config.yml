@@ -1,0 +1,31 @@
+prefix: "§f〔幻嵐助手〕§r "
+new_player_perr-on: false
+new_player_perr: "§d請完成教學指示，才可使用指令"
+new_player_perr-st: "huan.check.player"
+
+Lobby_perr: "bossshop.server.server1"
+
+limit_event:
+  enabled: false
+  egg_spawner: true # 阻止非原版生怪專
+  Piglin_Dorp: true # 取消地域豬布林掉落金劍
+  SlimeChunk: true # 史萊姆區塊確認
+
+# 材質包更新
+Resource:
+  enabled: false
+  urlt: "請輸入網址"
+
+# 時鐘獲取 點擊 開關
+clock:
+  enabled: true
+  right: /menu
+  shift_right: xxx
+  left: /med
+  shift_left: xxx
+
+# 防止鍛造玩家使用段鑿台升級裝備
+Prevent:
+  smithing_table_message: "§c該物品沒辦法升級或更動"
+  Map_BindStatus: "§c該書本,地圖畫受到綁定保護，您無法進行複製"
+  Book_BindStatus: "§c該書本,地圖畫受到綁定保護，您無法進行複製"

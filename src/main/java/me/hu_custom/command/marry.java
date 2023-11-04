@@ -5,6 +5,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import static me.hu_custom.Main.instance;
 
@@ -33,5 +35,18 @@ public class marry implements CommandExecutor {
             }
 
         return false;
+    }
+
+    @EventHandler
+    public void onPlayerChat(AsyncPlayerChatEvent event) {
+        if (marry.waitingForInput && event.getPlayer()==marry.e) {
+            event.setCancelled(true);
+            String player2 = event.getMessage();
+            String marrycommand = "marry marry " + player2;
+
+            Bukkit.getScheduler().runTask(instance, () -> marry.e.performCommand(marrycommand));
+
+            marry.waitingForInput = false;
+        }
     }
 }

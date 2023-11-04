@@ -1,30 +1,25 @@
 package me.hu_custom;
 
+import lombok.Getter;
 import me.hu_custom.command.Item_get;
 import me.hu_custom.command.SlimeChunk;
 import me.hu_custom.command.marry;
 import me.hu_custom.features.*;
-import me.hu_custom.listeners.playerchat;
-import me.hu_custom.remove.RemoveEvent;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.event.Listener;
+import me.hu_custom.util.Config;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Main extends JavaPlugin {
 
     public static Main instance = null;
-
-    public static boolean eggspawner_on,PiglinDorp_on,Resource_on,SlimeChunk_on,new_player_perr_on,clock_enabled;
-    public static String Resource_urlt, new_player_perr_st, prefix, new_player_perr, smithing_table_message,Map_BindStatus,Book_BindStatus;
-    public static String clock_right, clock_shiftRight, clock_left, clock_shiftLeft;
+    @Getter
+    private static Main inst;
 
 
     @Override
     public void onEnable() {
+        inst = this;
         instance = this;
-        FileConfiguration config = getConfig();
-        getConfig().options().copyDefaults(true);
-        saveConfig();
+        Config.loadConfig();
         System.out.println("hu_cou 啟動成功");
 
 
@@ -34,33 +29,12 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new Resource(),this);
         getServer().getPluginManager().registerEvents(new new_player(),this);
         getServer().getPluginManager().registerEvents(new Click_clock(),this);
-        getServer().getPluginManager().registerEvents(new playerchat(),this);
+        //getServer().getPluginManager().registerEvents(new playerchat(),this);
         getServer().getPluginManager().registerEvents(new err_up_equipment(),this);
         getServer().getPluginManager().registerEvents(new EAT_consume(), this);
-        getServer().getPluginManager().registerEvents(new RemoveEvent(), this);
 
 
 
-        eggspawner_on = config.getBoolean("egg_spawner-on");
-        PiglinDorp_on = config.getBoolean("Piglin_Dorp-on");
-        Resource_on = config.getBoolean("Resource-on");
-        SlimeChunk_on = config.getBoolean("SlimeChunk-on");
-        new_player_perr_on = config.getBoolean("new_player_perr-on");
-        clock_enabled = config.getBoolean("clock_enabled");
-
-
-        prefix = config.getString("prefix");
-        Resource_urlt = config.getString("Resource-urlt");
-        new_player_perr_st = config.getString("new_player_perr-st");
-        new_player_perr = config.getString("new_player_perr");
-        smithing_table_message = config.getString("smithing_table_message");
-        Map_BindStatus = config.getString("Map_BindStatus");
-        Book_BindStatus = config.getString("Book_BindStatus");
-
-        clock_right = config.getString("clock_right");
-        clock_shiftRight = config.getString("clock_shift_right");
-        clock_left = config.getString("clock_left");
-        clock_shiftLeft = config.getString("clock_shift_left");
 
 
         getCommand("urlt").setExecutor(new me.hu_custom.command.Resource());

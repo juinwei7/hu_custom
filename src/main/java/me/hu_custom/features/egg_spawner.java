@@ -1,6 +1,7 @@
 package me.hu_custom.features;
 
 import me.hu_custom.Main;
+import me.hu_custom.util.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -34,20 +35,21 @@ public class egg_spawner implements Listener {
         Location player_5 = e.getSpawner().getLocation();
         Collection<Entity> p = player_5.getWorld().getNearbyEntities(player_5, 10, 10, 10, null);
 
+        if (Config.isLimitevent()) {
+            if (Config.isEggspawner()) {
+                if (!entityTypes.contains(e.getEntityType())) {
+                    e.setCancelled(true);
+                    e.getSpawner().getLocation().getBlock().setType(Material.AIR);
 
-        if (Main.eggspawner_on) {
-            if (!entityTypes.contains(e.getEntityType())) {
-                e.setCancelled(true);
-                e.getSpawner().getLocation().getBlock().setType(Material.AIR);
+                    if (p.size() != 0) {
+                        for (Entity player : p) {
+                            player.sendMessage(ChatColor.RED + "已自動移除您附近非原版生怪磚");
+                            Bukkit.getLogger().info("[生怪磚]移除" + player_5 + " 類型:" + e.getEntityType());
 
-                if (p.size() != 0) {
-                    for (Entity player : p) {
-                        player.sendMessage(ChatColor.RED + "已自動移除您附近非原版生怪磚");
-                        Bukkit.getLogger().info("[生怪磚]移除"+player_5+" 類型:"+e.getEntityType());
+                        }
+                        return;
 
                     }
-                    return;
-
                 }
             }
         }

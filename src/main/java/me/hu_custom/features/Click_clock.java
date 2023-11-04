@@ -1,7 +1,6 @@
 package me.hu_custom.features;
 
-
-import me.hu_custom.Main;
+import me.hu_custom.util.Config;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,28 +13,25 @@ public class Click_clock implements Listener {
 
     @EventHandler
     public void onInventoryClick(PlayerInteractEvent event) {
-        if (!Main.clock_enabled) return;
+        if (!Config.isClock()) return;
         Player player = event.getPlayer();
         ItemStack item = player.getItemInHand();
-        if (item != null && item.getType() == Material.CLOCK) {
-            if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                if (player.isSneaking()) {
-                    if (!Main.clock_shiftRight.equals("xxx")) {
-                        player.chat(Main.clock_shiftRight);
-                    }
-                } else if (!Main.clock_right.equals("xxx")) {
-                    player.chat(Main.clock_right);
-                }
-            } else if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
-                if (player.isSneaking()) {
-                    if (!Main.clock_shiftLeft.equals("xxx")) {
-                        player.chat(Main.clock_shiftLeft);
-                    }
-                } else if (!Main.clock_left.equals("xxx")) {
-                    player.chat(Main.clock_left);
+        if (item.getType() == Material.CLOCK) {
+            String messageKey = null;
+            Action action = event.getAction();
+
+            if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
+                messageKey = player.isSneaking() ? Config.clock_shift_right : Config.clock_right;
+            } else if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
+                messageKey = player.isSneaking() ? Config.clock_shift_left : Config.clock_left;
+            }
+
+            if (messageKey != null) {
+                String message = Config.getConfig().getString(messageKey);
+                if (message != null && !message.equals("xxx")) {
+                    player.chat(message);
                 }
             }
         }
     }
-
 }
