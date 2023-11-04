@@ -22,3 +22,5 @@ clock_shift_left: xxx
 
 # 防止鍛造玩家使用段鑿台升級裝備
 smithing_table_message: "§c該物品沒辦法升級或更動"
+Map_BindStatus: "§c該書本,地圖畫受到綁定保護，您無法進行複製"
+Book_BindStatus: "§c該書本,地圖畫受到綁定保護，您無法進行複製"

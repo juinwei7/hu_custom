@@ -2,6 +2,8 @@ name: Hu_custom
 version: '${project.version}'
 main: me.hu_custom.Main
 api-version: 1.18
+authors:
+  - WEIWEI
 commands:
   Resource:
     aliases:
