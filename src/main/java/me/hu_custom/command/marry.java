@@ -6,12 +6,13 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import static me.hu_custom.Main.instance;
 
 
-public class marry implements CommandExecutor {
+public class marry implements CommandExecutor, Listener {
     public static boolean waitingForInput = false;
     public static Player e = null;
 

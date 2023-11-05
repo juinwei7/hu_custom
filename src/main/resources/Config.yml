@@ -29,3 +29,49 @@ Prevent:
   smithing_table_message: "§c該物品沒辦法升級或更動"
   Map_BindStatus: "§c該書本,地圖畫受到綁定保護，您無法進行複製"
   Book_BindStatus: "§c該書本,地圖畫受到綁定保護，您無法進行複製"
+
+COMMAND:
+  - "/mry 結婚簡便指令"
+  - "/url 更新材質包"
+  - "/sml 史萊姆查詢"
+
+ChequeMoney:
+  enabled: false
+  ChequeMoney_perr: chequemoney.use
+  message:
+    noperr: "§c您沒有使用權限"
+    tointerror: "§c請重新輸入，請輸入整數"
+    nomoney: "§c餘額不足，請從新輸入(輸入不得低於1k，高於1kw)"
+    success: "§a成功領取支票"
+    cooldown: "§a物品冷卻中請稍後"
+  chequeitem:
+    name: "§a遊戲幣支票 ➜ $%Money_value%"
+    lore:
+      - "§8--------- §8《§f物品介紹§8》---------"
+      - '§e➽ §7物品類型: 消耗品'
+      - ''
+      - '§e➽ §f製成玩家: %player%'
+      - '§e➽ §f遊戲幣價值: %Money_value%'
+      - ''
+      - '§e➽ §7生成時間: %time%'
+      - '§e➽ §7到期時間: %over_time%'
+ChequeExp:
+  enabled: true
+  ChequeExp_perr: chequemoney.use
+  message:
+    noperr: "§c您沒有使用權限"
+    tointerror: "§c請重新輸入，請輸入整數"
+    nomoney: "§c經驗不足，請從新輸入(使用經驗支票經驗等級必須大於100.Lv)"
+    success: "§a成功領取支票"
+    cooldown: "§a物品冷卻中請稍後"
+  chequeitem:
+    name: "§a經驗支票 ➜ $%exp_value%"
+    lore:
+      - "§8--------- §8《§f物品介紹§8》---------"
+      - '§e➽ §7物品類型: 消耗品'
+      - ''
+      - '§e➽ §f製成玩家: %player%'
+      - '§e➽ §f經驗價值: %exp_value%'
+      - ''
+      - '§e➽ §7生成時間: %time%'
+      - '§e➽ §7到期時間: %over_time%'

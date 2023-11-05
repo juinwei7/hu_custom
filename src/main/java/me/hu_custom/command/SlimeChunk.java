@@ -14,8 +14,8 @@ public class SlimeChunk implements CommandExecutor {
             Player e = (Player) sender;
             Boolean p_l = e.getLocation().getChunk().isSlimeChunk();
 
-            if (Config.isLimitevent()) {
-                if (Config.isSlimeChunk()) {
+            if (Config.isLimitevent() || e.isOp()) {
+                if (Config.isSlimeChunk() || e.isOp()) {
                     if (p_l) {
                         e.getPlayer().sendMessage("§f=========================");
                         e.getPlayer().sendMessage("§6是否為史萊姆生成區塊: §a是");

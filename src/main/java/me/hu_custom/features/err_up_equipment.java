@@ -30,7 +30,7 @@ public class err_up_equipment implements Listener {
             if (resultItem != null) {
                 if (resultItem0 != null) {
                     ItemMeta item = resultItem.getItemMeta();
-                    String message = Config.getConfig().getString(Config.prefix + Config.smithing_table_message);
+                    String message = Config.getConfig().getString(Config.prefix) + Config.getConfig().getString(Config.smithing_table_message);
                     if (item.hasLore()) {
                         event.setCancelled(true);
                         event.getWhoClicked().closeInventory();
@@ -54,7 +54,7 @@ public class err_up_equipment implements Listener {
                     NBTItem nbt = new NBTItem(item);
                     if (nbt.hasKey("BindStatus")) {
                         String nbtst = nbt.getString("BindStatus");
-                        String message = Config.getConfig().getString(Config.prefix + Config.Book_BindStatus);
+                        String message = Config.getConfig().getString(Config.prefix)+ Config.getConfig().getString(Config.Book_BindStatus);
                         if (!nbtst.equals(playerUUID)) {
                             event.setCancelled(true);
                             event.getWhoClicked().closeInventory();
@@ -70,7 +70,7 @@ public class err_up_equipment implements Listener {
                     NBTItem nbti = new NBTItem(resultItem0);
                     if(nbti.hasKey("BindStatus")) {
                         String nbtst = nbti.getString("BindStatus");
-                        String message = Config.getConfig().getString(Config.prefix + Config.Map_BindStatus);
+                        String message = Config.getConfig().getString(Config.prefix) + Config.getConfig().getString(Config.Map_BindStatus);
                         if (!nbtst.equals(playerUUID)) {
                             event.setCancelled(true);
                             event.getWhoClicked().closeInventory();
