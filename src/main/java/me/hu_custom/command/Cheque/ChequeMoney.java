@@ -56,7 +56,8 @@ public class ChequeMoney implements CommandExecutor , Listener {
                         ItemStack itemStack = new ItemStack(hub_item_paper(player,sendmoney));
                         player.getInventory().addItem(itemStack);
                         player.sendMessage(Config.getConfig().getString(Config.prefix) + "§a成功創建支票，金額 $" + sendmoney);
-
+                        String commandToExecute = "discordsrv broadcast #" + Config.getConfig().getString(Config.ChequeMoney_discordnb) + " :blue_square: 創建遊戲幣支票 " + player.getName() + ", " + sendmoney; // 替换为你想要执行的命令
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commandToExecute);
                     }else {
                         player.sendMessage(Config.getConfig().getString(Config.prefix) + Config.getConfig().getString(Config.ChequeMoney_message_nomoney));
                     }
@@ -111,7 +112,7 @@ public class ChequeMoney implements CommandExecutor , Listener {
 
         NBTItem nbt1 = new NBTItem(itemStack);
         nbt1.setString("hu_ItemName","ChequeMoney");
-        nbt1.setInteger("CustomModelData", 2000);
+        nbt1.setInteger("CustomModelData", 2001);
         nbt1.setInteger("money_value", value);
         nbt1.setString("hub_player", player_id);
         nbt1.setString("hub_uuid", uuid);
@@ -161,6 +162,8 @@ public class ChequeMoney implements CommandExecutor , Listener {
                         player.sendMessage("§c若領取失敗，請開客服單並提供截圖。");
                         player.sendMessage("§7=============================");
                         cooldown.setCooldown("ChequeMoney", 2);
+                        String commandToExecute = "discordsrv broadcast #" + Config.getConfig().getString(Config.ChequeMoney_discordnb) + " :red_square: 使用遊戲幣支票 " + player.getName() + ", " + value; // 替换为你想要执行的命令
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commandToExecute);
                     }else {
                         cooldown.sendActionBar(player,Config.getConfig().getString(Config.ChequeExp_message_cooldown));
                     }

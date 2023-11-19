@@ -34,9 +34,25 @@ COMMAND:
   - "/mry 結婚簡便指令"
   - "/url 更新材質包"
   - "/sml 史萊姆查詢"
+  - "/chequeexp 經驗支票"
+  - "/chequemoney 金錢支票"
+
+BIND:
+  Settings:
+    value: 500
+    BindLore1: '§b✔ §f%playername% §3已綁定完成'
+  Messages:
+    NoMoney: '§f〔幻嵐助手〕§r§6您的遊戲幣不足，需要花費: '
+    AlreadyBinded: '§f〔幻嵐助手〕§r§6此物品已被綁定過，無法再次綁定!'
+    BindSuccessfully: '§f〔幻嵐助手〕§r§f已成功將物品綁定為您的，若需解開請輸入/unbind!'
+    NotBinded: '§f〔幻嵐助手〕§r§c此物尚未被綁定無法解除，若需綁定請輸入/bind'
+    MainHandIsAir: '§f〔幻嵐助手〕§r§c您手上尚未持有任何物品!'
+    UnbindSuccessfully: '§f〔幻嵐助手〕§r§a已成功將物品解除綁定!'
+    OwnerUnbind: '§f〔幻嵐助手〕§r§c此物品不屬於你的，你不能進行解除綁定'
 
 ChequeMoney:
   enabled: false
+  discordnb: "1172813953013907506"
   ChequeMoney_perr: chequemoney.use
   message:
     noperr: "§c您沒有使用權限"
@@ -56,8 +72,9 @@ ChequeMoney:
       - '§e➽ §7生成時間: %time%'
       - '§e➽ §7到期時間: %over_time%'
 ChequeExp:
-  enabled: true
-  ChequeExp_perr: chequemoney.use
+  enabled: false
+  discordnb: "1172813953013907506"
+  ChequeExp_perr: chequeexp.use
   message:
     noperr: "§c您沒有使用權限"
     tointerror: "§c請重新輸入，請輸入整數"

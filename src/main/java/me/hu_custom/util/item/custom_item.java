@@ -1,4 +1,4 @@
-package me.hu_custom.item;
+package me.hu_custom.util.item;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

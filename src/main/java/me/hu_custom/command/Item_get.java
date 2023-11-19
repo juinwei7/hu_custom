@@ -1,7 +1,6 @@
 package me.hu_custom.command;
 
-import me.hu_custom.Main;
-import me.hu_custom.item.custom_item;
+import me.hu_custom.util.item.custom_item;
 import me.hu_custom.util.Config;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

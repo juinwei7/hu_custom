@@ -1,12 +1,11 @@
 package me.hu_custom;
 
 import lombok.Getter;
+import me.hu_custom.command.*;
 import me.hu_custom.command.Cheque.ChequeExp;
 import me.hu_custom.command.Cheque.ChequeMoney;
-import me.hu_custom.command.Item_get;
-import me.hu_custom.command.SlimeChunk;
-import me.hu_custom.command.marry;
 import me.hu_custom.features.*;
+import me.hu_custom.features.Resource;
 import me.hu_custom.util.Config;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -38,8 +37,11 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new marry(), this);
         getServer().getPluginManager().registerEvents(new err_up_equipment(),this);
         getServer().getPluginManager().registerEvents(new EAT_consume(), this);
+        getServer().getPluginManager().registerEvents(new NoPlace_haslore(), this);
         getServer().getPluginManager().registerEvents(new ChequeMoney(), this);
         getServer().getPluginManager().registerEvents(new ChequeExp(), this);
+        getServer().getPluginManager().registerEvents(new SHIFT_F(), this);
+        getServer().getPluginManager().registerEvents(new NO_Drop(inst), this);
 
 
 
@@ -51,6 +53,9 @@ public final class Main extends JavaPlugin {
         getCommand("mry").setExecutor(new marry());
         getCommand("chequemoney").setExecutor(new ChequeMoney());
         getCommand("chequeexp").setExecutor(new ChequeExp());
+        getCommand("bind").setExecutor(new Bind());
+        getCommand("unbind").setExecutor(new Bind());
+        getCommand("dr").setExecutor(new NO_Drop(inst));
 
         if (!setupEconomy()) {
             getLogger().severe("Vault插件未找到，禁用插件！");

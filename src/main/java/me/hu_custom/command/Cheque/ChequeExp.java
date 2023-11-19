@@ -55,6 +55,8 @@ public class ChequeExp implements CommandExecutor, Listener {
                         ItemStack itemStack = new ItemStack(hub_item_paper(player,sendmoney));
                         player.getInventory().addItem(itemStack);
                         player.sendMessage(Config.getConfig().getString(Config.prefix) + "§a成功創建支票，EXP值 " + sendmoney);
+                        String commandToExecute = "discordsrv broadcast #" + Config.getConfig().getString(Config.ChequeExp_discordnb) + " :blue_square: 創建經驗支票 " + player.getName() + ", " + sendmoney; // 替换为你想要执行的命令
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commandToExecute);
 
                     }else {
                         player.sendMessage(Config.getConfig().getString(Config.prefix) + Config.getConfig().getString(Config.ChequeExp_message_nomoney));
@@ -110,7 +112,7 @@ public class ChequeExp implements CommandExecutor, Listener {
 
         NBTItem nbt1 = new NBTItem(itemStack);
         nbt1.setString("hu_ItemName","ChequeExp");
-        nbt1.setInteger("CustomModelData", 2000);
+        nbt1.setInteger("CustomModelData", 2002);
         nbt1.setInteger("exp_value", value);
         nbt1.setString("hub_player", player_id);
         nbt1.setString("hub_uuid", uuid);
@@ -158,6 +160,8 @@ public class ChequeExp implements CommandExecutor, Listener {
                         player.sendMessage("§c若領取失敗，請開客服單並提供截圖。");
                         player.sendMessage("§7=============================");
                         cooldown.setCooldown("ChequeExp", 2);
+                        String commandToExecute = "discordsrv broadcast #" + Config.getConfig().getString(Config.ChequeExp_discordnb) + " :red_square: 使用經驗支票 " + player.getName() + ", " + value; // 替换为你想要执行的命令
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commandToExecute);
                     }else {
                         cooldown.sendActionBar(player,Config.getConfig().getString(Config.ChequeMoney_message_cooldown));
                     }

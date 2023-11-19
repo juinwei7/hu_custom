@@ -23,5 +23,14 @@ commands:
   chequeexp:
     aliases:
       - chequeexp
+  bind:
+    aliases:
+      - bind
+  unbind:
+    aliases:
+      - unbind
+  dr:
+    aliases:
+      - dr
 
 
