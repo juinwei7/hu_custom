@@ -1,6 +1,7 @@
 package me.hu_custom;
 
 import lombok.Getter;
+import me.hu_custom.DataBase.DataBase;
 import me.hu_custom.command.*;
 import me.hu_custom.command.Cheque.ChequeExp;
 import me.hu_custom.command.Cheque.ChequeMoney;
@@ -12,6 +13,8 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Main extends JavaPlugin {
+
+    public static DataBase dataBase = null;
 
     public static Main instance = null;
     @Getter
@@ -25,10 +28,12 @@ public final class Main extends JavaPlugin {
         inst = this;
         instance = this;
         Config.loadConfig();
+        dataBase = new DataBase(getConfig());
         System.out.println("hu_cou 啟動成功");
 
 
 
+        getServer().getPluginManager().registerEvents(new Equipment_rollCommand(), this);
         getServer().getPluginManager().registerEvents(new egg_spawner(), this);
         getServer().getPluginManager().registerEvents(new Piglin_Dorp(),this);
         getServer().getPluginManager().registerEvents(new Resource(),this);
@@ -41,12 +46,13 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ChequeMoney(), this);
         getServer().getPluginManager().registerEvents(new ChequeExp(), this);
         getServer().getPluginManager().registerEvents(new SHIFT_F(), this);
+        getServer().getPluginManager().registerEvents(new EXP_LIMIT(), this);
         getServer().getPluginManager().registerEvents(new NO_Drop(inst), this);
 
 
 
 
-
+        getCommand("equipment_roll").setExecutor(new me.hu_custom.command.Equipment_rollCommand());
         getCommand("urlt").setExecutor(new me.hu_custom.command.Resource());
         getCommand("smp").setExecutor(new SlimeChunk());
         getCommand("huget").setExecutor(new Item_get());
@@ -56,6 +62,7 @@ public final class Main extends JavaPlugin {
         getCommand("bind").setExecutor(new Bind());
         getCommand("unbind").setExecutor(new Bind());
         getCommand("dr").setExecutor(new NO_Drop(inst));
+        getCommand("bosstime").setExecutor(new BossTime());
 
         if (!setupEconomy()) {
             getLogger().severe("Vault插件未找到，禁用插件！");

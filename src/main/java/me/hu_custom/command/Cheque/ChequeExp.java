@@ -48,10 +48,11 @@ public class ChequeExp implements CommandExecutor, Listener {
                         player.sendMessage(Config.getConfig().getString(Config.prefix) + Config.getConfig().getString(Config.ChequeExp_message_tointerror));
                         return false;
                     }
-                    if(sendmoney < vat && vatleve >= 100 && sendmoney > 0){
+                    double sendmoney_tax = sendmoney*1.05; //x稅率 5%
+                    if(sendmoney_tax < vat && vatleve >= 100 && sendmoney > 0){
                         Bukkit.getLogger().info(String.valueOf(vatleve));
 
-                        player.giveExp(-sendmoney);
+                        player.giveExp((int) -sendmoney_tax);
                         ItemStack itemStack = new ItemStack(hub_item_paper(player,sendmoney));
                         player.getInventory().addItem(itemStack);
                         player.sendMessage(Config.getConfig().getString(Config.prefix) + "§a成功創建支票，EXP值 " + sendmoney);

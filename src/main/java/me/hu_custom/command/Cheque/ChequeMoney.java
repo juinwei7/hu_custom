@@ -50,9 +50,10 @@ public class ChequeMoney implements CommandExecutor , Listener {
                         player.sendMessage(Config.getConfig().getString(Config.prefix) + Config.getConfig().getString(Config.ChequeMoney_message_tointerror));
                         return false;
                     }
-                    if(sendmoney < vatint && sendmoney > 1000 && sendmoney < 10000000){
+                    double sendmoney_tax = sendmoney*1.05; //x稅率 5%
+                    if(sendmoney_tax < vatint && sendmoney > 1000 && sendmoney < 10000000){ //檢查money是否足夠
 
-                        Main.econ.withdrawPlayer(player, sendmoney);
+                        Main.econ.withdrawPlayer(player, sendmoney_tax);
                         ItemStack itemStack = new ItemStack(hub_item_paper(player,sendmoney));
                         player.getInventory().addItem(itemStack);
                         player.sendMessage(Config.getConfig().getString(Config.prefix) + "§a成功創建支票，金額 $" + sendmoney);

@@ -5,6 +5,13 @@ new_player_perr-st: "huan.check.player"
 
 Lobby_perr: "bossshop.server.server1"
 
+mysql:
+  host: "192.168.50.30"
+  port: 3306
+  database: "hu_custom"
+  user: "root"
+  password: "A021890a"
+
 limit_event:
   enabled: false
   egg_spawner: true # 阻止非原版生怪專
@@ -50,8 +57,39 @@ BIND:
     UnbindSuccessfully: '§f〔幻嵐助手〕§r§a已成功將物品解除綁定!'
     OwnerUnbind: '§f〔幻嵐助手〕§r§c此物品不屬於你的，你不能進行解除綁定'
 
-ChequeMoney:
+# 裝備卷兌換
+Equipment:
   enabled: false
+  Gui_name: "        §c副本裝備卷兌換"
+  Messages:
+    NoNbtTag: '§f〔幻嵐助手〕§r§6該物品沒有相應標籤 '
+    NOITEM: '§f〔幻嵐助手〕§r§c沒有物品'
+    NOAmount: '§f〔幻嵐助手〕§r§c數量不足，需要 %amount% 張'
+  Equipment_list:
+    - 'stic01,6,crazycrate give p st0101副本裝備抽獎n 1 %player%'
+    - 'sthid01,3,crazycrate give p st1101副本裝備抽獎(隱王)n 1 %player%'
+    - 'stic02,6,crazycrate give p st0201副本裝備抽獎n 1 %player%'
+    - 'sthid02,3,crazycrate give p st1201副本裝備抽獎(隱王)n 1 %player%'
+    - 'stic03,4,crazycrate give p st0301副本裝備抽獎n 1 %player%'
+    - 'sthid03,2,crazycrate give p st1301副本裝備抽獎(隱王)n 1 %player%'
+    - 'stic04,4,crazycrate give p st0401副本裝備抽獎n 1 %player%'
+    - 'stic05,4,crazycrate give p st0501副本裝備抽獎n 1 %player%'
+    - 'stic06,4,crazycrate give p st0601副本裝備抽獎n 1 %player%'
+
+
+#boss冷卻時間
+BossTimeing:
+  enabled: true
+  TimeCooldown:
+    - 'boss_01,240,源林鳴森林BOSS'
+    - 'boss_02,960,冰晶雪原BOSS'
+    - 'boss_03,1680,天之國度BOSS'
+    - 'boss_04,2400,月赫星球BOSS'
+    - 'boss_05,3600,璃境起源BOSS'
+    - 'boss_06,4200,賽博龐克BOSS'
+
+ChequeMoney:
+  enabled: true
   discordnb: "1172813953013907506"
   ChequeMoney_perr: chequemoney.use
   message:
@@ -72,7 +110,7 @@ ChequeMoney:
       - '§e➽ §7生成時間: %time%'
       - '§e➽ §7到期時間: %over_time%'
 ChequeExp:
-  enabled: false
+  enabled: true
   discordnb: "1172813953013907506"
   ChequeExp_perr: chequeexp.use
   message:

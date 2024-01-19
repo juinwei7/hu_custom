@@ -5,6 +5,9 @@ api-version: 1.18
 authors:
   - WEIWEI
 commands:
+  equipment_roll:
+    aliases:
+      - equipment_roll
   Resource:
     aliases:
       - urlt
@@ -32,5 +35,8 @@ commands:
   dr:
     aliases:
       - dr
+  bosstime:
+    aliases:
+    - bosstime
 
 
