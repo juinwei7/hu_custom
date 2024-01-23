@@ -76,6 +76,19 @@ Equipment:
     - 'stic05,4,crazycrate give p st0501副本裝備抽獎n 1 %player%'
     - 'stic06,4,crazycrate give p st0601副本裝備抽獎n 1 %player%'
 
+# 扣稅
+TAX:
+  enabled_world: 'Lobby'
+  money_list:
+    - 60000001,25
+    - 60000000,18
+    - 40000000,16
+    - 20000000,14
+    - 16000000,12
+    - 8000000,8
+    - 3000000,5
+    - 1000000,2
+
 
 #boss冷卻時間
 BossTimeing:
@@ -130,3 +143,4 @@ ChequeExp:
       - ''
       - '§e➽ §7生成時間: %time%'
       - '§e➽ §7到期時間: %over_time%'
+

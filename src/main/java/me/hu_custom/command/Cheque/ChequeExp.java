@@ -50,7 +50,6 @@ public class ChequeExp implements CommandExecutor, Listener {
                     }
                     double sendmoney_tax = sendmoney*1.05; //x稅率 5%
                     if(sendmoney_tax < vat && vatleve >= 100 && sendmoney > 0){
-                        Bukkit.getLogger().info(String.valueOf(vatleve));
 
                         player.giveExp((int) -sendmoney_tax);
                         ItemStack itemStack = new ItemStack(hub_item_paper(player,sendmoney));

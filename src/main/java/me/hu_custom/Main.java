@@ -8,6 +8,7 @@ import me.hu_custom.command.Cheque.ChequeMoney;
 import me.hu_custom.features.*;
 import me.hu_custom.features.Resource;
 import me.hu_custom.util.Config;
+import me.hu_custom.util.WarpItem;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -28,6 +29,7 @@ public final class Main extends JavaPlugin {
         inst = this;
         instance = this;
         Config.loadConfig();
+        WarpItem.loadWarpitem();
         dataBase = new DataBase(getConfig());
         System.out.println("hu_cou 啟動成功");
 
@@ -47,6 +49,9 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ChequeExp(), this);
         getServer().getPluginManager().registerEvents(new SHIFT_F(), this);
         getServer().getPluginManager().registerEvents(new EXP_LIMIT(), this);
+        getServer().getPluginManager().registerEvents(new TaxCommand(), this);
+        getServer().getPluginManager().registerEvents(new warpitem(), this);
+        getServer().getPluginManager().registerEvents(new Player_Fly(), this);
         getServer().getPluginManager().registerEvents(new NO_Drop(inst), this);
 
 
@@ -63,6 +68,8 @@ public final class Main extends JavaPlugin {
         getCommand("unbind").setExecutor(new Bind());
         getCommand("dr").setExecutor(new NO_Drop(inst));
         getCommand("bosstime").setExecutor(new BossTime());
+        getCommand("sxbagkey").setExecutor(new SxbagkeyCommand());
+        getCommand("taxcheck").setExecutor(new TaxCommand());
 
         if (!setupEconomy()) {
             getLogger().severe("Vault插件未找到，禁用插件！");

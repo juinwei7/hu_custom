@@ -38,5 +38,11 @@ commands:
   bosstime:
     aliases:
     - bosstime
+  taxcheck:
+    aliases:
+      - taxcheck
+  sxbagkey:
+    aliases:
+      - sxbagkey
 
 
