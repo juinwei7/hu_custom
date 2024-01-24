@@ -1,0 +1,51 @@
+warp_name:
+  list:
+    #- 'nbtkey,nbtvatvalue,指令'
+    - 'SX-Attribute-Name,up_to昇華寶石_new,warp 特殊抽獎機 %player%'
+    - 'CrazyCrates-Crate,特殊抽獎機,warp 特殊抽獎機 %player%'
+
+
+    #============== 副本大廳 ===============
+    - 'MYTHIC_TYPE,newbie,warp stst00 %player%'
+    - 'MYTHIC_TYPE,st綠紋翡翠,warp stst_spawn %player%'
+    - 'MYTHIC_TYPE,st紋麟角,warp stst_spawn %player%'
+    - 'MYTHIC_TYPE,st獵翳石骨,warp stst_spawn %player%'
+    - 'MYTHIC_TYPE,st嗜血珠,warp stst_spawn %player%'
+    - 'MYTHIC_TYPE,st萬年木材,warp stst_spawn %player%'
+    - 'MYTHIC_TYPE,冰st,warp stst_spawn %player%'
+    - 'MYTHIC_TYPE,天st,warp stst_spawn %player%'
+    - 'MYTHIC_TYPE,月st,warp stst_spawn %player%'
+    - 'MYTHIC_TYPE,璃st,msg %player% 該物品無法有效傳送'
+    - 'MYTHIC_TYPE,賽st,msg %player% 該物品無法有效傳送'
+
+    - 'MYTHIC_TYPE,act101,warp stst_spawn %player%'
+    - 'MYTHIC_TYPE,act201,warp stst_spawn %player%'
+
+    #============== 副本裝備 ===============
+    - 'SX-Attribute-Name,sthid,warp stcy %player%'
+    - 'SX-Attribute-Name,stic,warp stcy %player%'
+    - 'MYTHIC_TYPE,kill,warp stcy %player%'
+    - 'CrazyCrates-Crate,副本裝備抽獎,warp stcy %player%'
+    - 'CrazyCrates-Crate,money金錢,warp stcy %player%'
+
+    #============== 礦機 ===============
+    - 'hu_ItemName,Blood_Evangelion,warp org %player%'
+    - 'SX-Attribute-Name,熊貓竹子,warp org %player%'
+    - 'MYTHIC_TYPE,org_合金鐵,warp org %player%'
+
+    - 'MYTHIC_TYPE,hut,warp mkr %player%'
+
+    #============== 初-高抽獎 ===============
+    - 'CrazyCrates-Crate,EXC,warp dimension %player%'
+    - 'SX-Attribute-Name,ccr,warp dimension %player%'
+
+    #============== 巨人 ===============
+    - 'MYTHIC_TYPE,crystal,warp fut %player%'
+
+
+item_name:
+  list:
+    #- 'nbtkey,nbtvatvalue,指令'
+    - '建材兌換卷,warp store %player%'
+    - '幻嵐禮包區,warp 禮包區 %player%'
+    - '葉靈精華,warp org %player%'
