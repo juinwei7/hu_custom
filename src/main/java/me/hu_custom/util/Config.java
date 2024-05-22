@@ -56,7 +56,9 @@ public class Config {
 
     //boss冷卻時間
     public static final String BossTimeing_enabled = "BossTimeing.enabled";
+    public static final String BossTimeing_SpawnerName_list = "BossTimeing.SpawnerName";
     public static final String BossTimeing_TimeCooldown_list = "BossTimeing.TimeCooldown";
+
 
 
     public static final String COMMAND = "COMMAND";
@@ -100,7 +102,8 @@ public class Config {
 
     @Getter
     private static List<String> TAX_moneylist;
-
+    @Getter
+    private static List<String> BossTimeing_SpawnerName;
     @Getter
     private static List<String> BossTimeing_TimeCooldown;
 
@@ -152,5 +155,6 @@ public class Config {
         Equipment_list = config.getStringList(Equipment_Equipment_list);
         TAX_moneylist = config.getStringList(TAX_money_list);
         BossTimeing_TimeCooldown = config.getStringList(BossTimeing_TimeCooldown_list);
+        BossTimeing_SpawnerName = config.getStringList(BossTimeing_SpawnerName_list);
     }
 }

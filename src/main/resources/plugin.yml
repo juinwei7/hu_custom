@@ -44,5 +44,8 @@ commands:
   sxbagkey:
     aliases:
       - sxbagkey
+  buffmenu:
+    aliases:
+      - buffmenu
 
 

@@ -1,17 +1,23 @@
 package me.hu_custom;
 
+import de.Linus122.SafariNet.API.SafariNet;
 import lombok.Getter;
 import me.hu_custom.DataBase.DataBase;
+import me.hu_custom.Hook.PlaceholderUtil;
 import me.hu_custom.command.*;
 import me.hu_custom.command.Cheque.ChequeExp;
 import me.hu_custom.command.Cheque.ChequeMoney;
 import me.hu_custom.features.*;
 import me.hu_custom.features.Resource;
+import me.hu_custom.features.Safari.SafariNetListener;
+import me.hu_custom.util.Buff;
 import me.hu_custom.util.Config;
 import me.hu_custom.util.WarpItem;
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+
 
 public final class Main extends JavaPlugin {
 
@@ -20,6 +26,12 @@ public final class Main extends JavaPlugin {
     public static Main instance = null;
     @Getter
     private static Main inst;
+
+    @Getter
+    public static PlaceholderUtil papi;
+
+    @Getter
+    private static boolean placeholder;
 
     public static Economy econ = null;
 
@@ -30,9 +42,12 @@ public final class Main extends JavaPlugin {
         instance = this;
         Config.loadConfig();
         WarpItem.loadWarpitem();
+        Buff.loadBuff();
         dataBase = new DataBase(getConfig());
         System.out.println("hu_cou 啟動成功");
 
+        SafariNetListener safarinetListener = new SafariNetListener();
+        SafariNet.addListener(safarinetListener);
 
 
         getServer().getPluginManager().registerEvents(new Equipment_rollCommand(), this);
@@ -52,12 +67,17 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new TaxCommand(), this);
         getServer().getPluginManager().registerEvents(new warpitem(), this);
         getServer().getPluginManager().registerEvents(new Player_Fly(), this);
+        getServer().getPluginManager().registerEvents(new Rule(), this);
         getServer().getPluginManager().registerEvents(new NO_Drop(inst), this);
 
+        getServer().getPluginManager().registerEvents(new check_perr(), this);
+        getServer().getPluginManager().registerEvents(new BossTime(), this);
+        getServer().getPluginManager().registerEvents(new BuffCommand(), this);
 
 
 
-        getCommand("equipment_roll").setExecutor(new me.hu_custom.command.Equipment_rollCommand());
+
+        getCommand("equipment_roll").setExecutor(new Equipment_rollCommand());
         getCommand("urlt").setExecutor(new me.hu_custom.command.Resource());
         getCommand("smp").setExecutor(new SlimeChunk());
         getCommand("huget").setExecutor(new Item_get());
@@ -70,11 +90,20 @@ public final class Main extends JavaPlugin {
         getCommand("bosstime").setExecutor(new BossTime());
         getCommand("sxbagkey").setExecutor(new SxbagkeyCommand());
         getCommand("taxcheck").setExecutor(new TaxCommand());
+        getCommand("buffmenu").setExecutor(new BuffCommand());
 
         if (!setupEconomy()) {
             getLogger().severe("Vault插件未找到，禁用插件！");
             getServer().getPluginManager().disablePlugin(this);
             return;
+        }
+
+        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            // 注册PlaceholderAPI扩展
+            new PlaceholderUtil().register();
+        } else {
+            // PlaceholderAPI未找到，可以选择在这里处理
+            getLogger().warning("PlaceholderAPI not found, some features will be disabled!");
         }
 
 

@@ -1,56 +1,38 @@
 package me.hu_custom.command;
 
+import io.lumine.mythic.bukkit.MythicBukkit;
+import io.lumine.mythic.core.spawning.spawners.MythicSpawner;
 import me.hu_custom.DataBase.DataBase;
+import me.hu_custom.Hook.PlaceholderUtil;
 import me.hu_custom.util.Config;
+import me.hu_custom.util.cooldown;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class BossTime implements CommandExecutor {
+import static me.hu_custom.util.cooldown.setCooldown;
+
+
+public class BossTime implements CommandExecutor, Listener {
+
+    public static Map<String, Integer> boss_cooldown = new HashMap<>();
+
     public boolean onCommand(CommandSender sender, Command cmd, String lable, String[] args) {
         // 获取当前时间
-        Calendar calendar = Calendar.getInstance();
 
         if (lable.equalsIgnoreCase("bosstime")) {
             if (args.length >= 2) {
-                if (args[0].equals("set") && args.length == 3) {
-
-                    if (sender instanceof Player) { //防止非管理人員輸入
-                        Player player = (Player) sender;
-                        if (!player.isOp()) {
-                            return false;
-                        }
-
-                    }
-                    String bossname = args[1];
-                    List<String> Bosstimes_list = Config.getBossTimeing_TimeCooldown();
-                    for (String Bosstimes : Bosstimes_list){
-                        String[] parts = Bosstimes.split(",");
-                        String boss_name = parts[0];
-                        String killname = args[2];
-                        int bosscooldown = Integer.parseInt(parts[1]);  // 物品数量
-
-                        if (bossname.equals(boss_name)){
-                            calendar.add(Calendar.MINUTE, bosscooldown/60);
-                            Timestamp timestamp = new Timestamp(calendar.getTimeInMillis());
-                            DataBase.saveData(bossname, timestamp, killname);
-                            if (sender instanceof Player){
-                                Player player = (Player) sender;
-                                player.sendMessage(bossname + " 已更新時間");
-                            }
-                            Bukkit.getLogger().info(bossname + " 已更新時間");
-                        }
-
-                    }
-                }
                 if (args[0].equals("check")) {
 
                     List<String> Bosstimes_list = Config.getBossTimeing_TimeCooldown();
@@ -68,24 +50,24 @@ public class BossTime implements CommandExecutor {
                             break;
                         }
                     }
-                    if (!hasbossname){return false;} //處理不在名單上的bossname
+                    if (!hasbossname) {
+                        return false;
+                    } //處理不在名單上的bossname
 
                     Map timebossValue = DataBase.loadData(args[1]);
                     Timestamp expiretime = (Timestamp) timebossValue.get("expiretime");
-                    String killname = (String) timebossValue.get("killname");
 
                     try {
                         SimpleDateFormat dateFormat = new SimpleDateFormat("HH 時 mm 分 ss 秒");
                         String formattedTime = dateFormat.format(expiretime);
 
-                        if (sender instanceof Player){
+                        if (sender instanceof Player) {
                             Player player = (Player) sender;
                             player.sendMessage("§7=========================");
                             player.sendMessage("§7");
                             player.sendMessage("§e " + bossname_st + " ➜");
                             player.sendMessage("§7");
                             player.sendMessage("§f   ⏲下次出生時間: " + formattedTime);
-                            player.sendMessage("§f   \uD83C\uDFAE上次擊殺玩家: " + killname);
                             player.sendMessage("§7");
                             player.sendMessage("§7=========================");
                         }
@@ -96,11 +78,77 @@ public class BossTime implements CommandExecutor {
                 }
 
 
-            }else {
-                Bukkit.getLogger().info("指令錯誤");
             }
 
         }
         return false;
+    }
+
+
+
+    @EventHandler
+    public void DeathEvent(EntityDeathEvent event) {
+
+        String worldname = event.getEntity().getWorld().getName();
+
+        if (worldname.contains("stst") || worldname.contains("stst02") || worldname.contains("stst03")) {
+
+            Entity bukkitEntity = event.getEntity();
+            if (!MythicBukkit.inst().getMobManager().isMythicMob(bukkitEntity)) {
+                return;
+            } //不是myth生物直接返回
+
+            List<String> spawner_list = Config.getBossTimeing_SpawnerName();
+            for (String spawner : spawner_list) {
+                String[] parts = spawner.split(",");
+                String spawnerName = parts[0];
+                String cooldType = parts[1];
+                String sql_bossname = parts[2];
+                MythicSpawner mobsspawner = MythicBukkit.inst().getSpawnerManager().getSpawnerByName(spawnerName);
+                if (mobsspawner != null) {
+                    if (cooldType.equals("Cooldown")) {
+                        int mobtime = mobsspawner.getRemainingCooldownSeconds(); //獲取冷卻時間
+                        boss_cooldown.put(sql_bossname, mobtime);
+                    }
+                    if (cooldType.equals("Warmup")) {
+                        int mobtime = mobsspawner.getRemainingWarmupSeconds(); //獲取冷卻時間
+                        boss_cooldown.put(sql_bossname, mobtime);
+                    }
+                }
+            }
+            if (!cooldown.isOnCooldown("boss_cooldown")) {
+                for (Map.Entry<String, Integer> entry : boss_cooldown.entrySet()) {
+                    String sql_bossname = entry.getKey();
+                    Integer cooldown = entry.getValue();
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.add(Calendar.SECOND, cooldown);
+                    Timestamp timestamp = new Timestamp(calendar.getTimeInMillis());
+                    setCooldown("boss_cooldown", 120);
+
+                    DataBase.saveData(sql_bossname, timestamp);
+                }
+                Bukkit.getLogger().info("已執行---boss_cooldown");
+            }
+        }
+
+    }
+    @EventHandler
+    public void join(PlayerJoinEvent event) {
+        List<String> spawner_list = Config.getBossTimeing_SpawnerName();
+        if (!cooldown.isOnCooldown("boss_cooldown")) {
+            for (String spawner : spawner_list) {
+                String[] parts = spawner.split(",");
+                String sql_bossname = parts[2];
+                Map timebossValue = DataBase.loadData(sql_bossname);
+                if (timebossValue != null) {
+                    Timestamp expiretime = (Timestamp) timebossValue.get("expiretime");
+                    if (expiretime != null) {
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+                        String formattedTime = dateFormat.format(expiretime);
+                        PlaceholderUtil.dataMap.put(sql_bossname, formattedTime);
+                    }
+                }
+            }
+        }
     }
 }

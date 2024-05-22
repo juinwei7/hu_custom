@@ -73,7 +73,7 @@ public class NO_Drop implements CommandExecutor, Listener {
             } else {
                 addDropCooldown(playerUUID);
                 event.setCancelled(true);
-                player.spigot().sendMessage(ChatMessageType.ACTION_BAR,  TextComponent.fromLegacyText(ChatColor.RESET + "已取消丟棄物品，若要丟棄請連按兩下丟棄鍵(或輸入 /dr 關比該功能)"));
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR,  TextComponent.fromLegacyText(ChatColor.RESET + "已取消丟棄物品，若要丟棄請連按兩下丟棄鍵(或輸入 /dr 關閉該功能)"));
 
                 new BukkitRunnable() {
                     @Override

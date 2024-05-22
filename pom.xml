@@ -70,6 +70,20 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <repository>
+            <id>spaceio-repo</id>
+            <url>https://repo.spaceio.xyz/repository/maven-public/</url>
+        </repository>
+        <repository>
+            <id>nexus</id>
+            <name>Lumine Releases</name>
+            <url>https://mvn.lumine.io/repository/maven-public/</url>
+        </repository>
+        <repository>
+            <id>placeholderapi</id>
+            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+        </repository>
+
     </repositories>
 
     <dependencies>
@@ -113,6 +127,30 @@
             <version>5.1.4.1</version>
             <scope>system</scope>
             <systemPath>${basedir}/lib/Residence5.1.4.1.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>MysqlPlayerDataBridge</groupId>
+            <artifactId>CraftersLand</artifactId>
+            <version>4.11.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/MysqlPlayerDataBridge-v4.11.0.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>xyz.spaceio</groupId>
+            <artifactId>SafariNet</artifactId>
+            <version>1.15.37-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>io.lumine</groupId>
+            <artifactId>Mythic-Dist</artifactId>
+            <version>5.6.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>me.clip</groupId>
+            <artifactId>placeholderapi</artifactId>
+            <version>2.11.5</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

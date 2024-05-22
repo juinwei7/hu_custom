@@ -93,6 +93,10 @@ TAX:
 #boss冷卻時間
 BossTimeing:
   enabled: true
+  SpawnerName:
+    - 'stboss,Cooldown,boss_01'
+    - '3stboss,Warmup,boss_02'
+    - 'day_boss,Warmup,boss_03'
   TimeCooldown:
     - 'boss_01,240,源林鳴森林BOSS'
     - 'boss_02,960,冰晶雪原BOSS'

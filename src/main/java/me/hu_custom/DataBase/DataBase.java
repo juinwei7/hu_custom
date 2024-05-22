@@ -39,7 +39,7 @@ public class DataBase {
 
 
     private void createTable() {
-        String query = "CREATE TABLE IF NOT EXISTS `bosstime` (timeboss VARCHAR(36) PRIMARY KEY, expiretime TIMESTAMP, killname VARCHAR(36));";
+        String query = "CREATE TABLE IF NOT EXISTS `bosstime` (timeboss VARCHAR(36) PRIMARY KEY, expiretime TIMESTAMP);";
         String taxbase = "CREATE TABLE IF NOT EXISTS `taxplayer` (uuid VARCHAR(36) PRIMARY KEY, name VARCHAR(36), taxmoney VARCHAR(36), expiretime TIMESTAMP);";
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(query);
@@ -55,7 +55,7 @@ public class DataBase {
     /*
     bosstime 副本王時間
      */
-    public static void saveData(String timeboss, Timestamp expiretime, String killname) {
+    public static void saveData(String timeboss, Timestamp expiretime) {
         try {
             Connection connection = dataSource.getConnection();
 
@@ -67,21 +67,19 @@ public class DataBase {
 
             if (resultSet.next()) {
                 // 存在相同 timeboss 记录，执行更新操作
-                String updateQuery = "UPDATE bosstime SET expiretime = ?, killname = ? WHERE timeboss = ?";
+                String updateQuery = "UPDATE bosstime SET expiretime = ? WHERE timeboss = ?";
                 PreparedStatement preparedStatement = connection.prepareStatement(updateQuery);
                 preparedStatement.setTimestamp(1, expiretime);
-                preparedStatement.setString(2, killname);
-                preparedStatement.setString(3, timeboss);
+                preparedStatement.setString(2, timeboss);
 
                 preparedStatement.executeUpdate(); // 执行更新操作
                 preparedStatement.close();
             } else {
                 // 不存在相同 timeboss 记录，执行插入操作
-                String insertQuery = "INSERT INTO bosstime (timeboss, expiretime, killname) VALUES (?, ?, ?)";
+                String insertQuery = "INSERT INTO bosstime (timeboss, expiretime) VALUES (?, ?)";
                 PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
                 preparedStatement.setString(1, timeboss);
                 preparedStatement.setTimestamp(2, expiretime);
-                preparedStatement.setString(3, killname);
 
                 preparedStatement.executeUpdate(); // 执行插入操作
                 preparedStatement.close();
@@ -101,7 +99,7 @@ public class DataBase {
         try {
             Connection connection = dataSource.getConnection();
 
-            String selectQuery = "SELECT expiretime, killname FROM bosstime WHERE timeboss = ?";
+            String selectQuery = "SELECT expiretime FROM bosstime WHERE timeboss = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(selectQuery);
             preparedStatement.setString(1, timebossd);
 
@@ -109,13 +107,10 @@ public class DataBase {
 
             if (resultSet.next()) {
                 Timestamp expiretime = resultSet.getTimestamp("expiretime");
-                String killname = resultSet.getString("killname");
 
                 bossData.put("expiretime", expiretime);
-                bossData.put("killname", killname);
             }else {
                 bossData.put("expiretime", null);
-                bossData.put("killname", null);
             }
 
             resultSet.close();

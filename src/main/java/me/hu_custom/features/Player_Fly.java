@@ -14,6 +14,8 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.Calendar;
 
 public class Player_Fly implements Listener {
@@ -29,17 +31,22 @@ public class Player_Fly implements Listener {
         Player player = event.getPlayer();
         if (player.hasPermission(Permission_all)){
             player.setAllowFlight(true);
-            seedMessage(player,"§a已開啟",true,"許可飛行時間 無限制");
+            seedMessage(player,"§a已開啟",false,"許可飛行時間 無限制");
+            return;
+        }
+        if (isweekday() && player.hasPermission(Permission_player)){  //假日
+            player.setAllowFlight(true);
+            seedMessage(player,"§a已開啟",true,"許可飛行時間 12:00 - 04:00");
             return;
         }
         if (player.hasPermission(Permission_vip6) && isFlightAllowedNow(14,23)){
             player.setAllowFlight(true);
-            seedMessage(player,"§a已開啟",true,"許可飛行時間 14:00 - 00:00");
+            seedMessage(player,"§a已開啟",false,"許可飛行時間 14:00 - 00:00");
             return;
         }
         if (player.hasPermission(Permission_player) && isFlightAllowedNow(18,21)){
             player.setAllowFlight(true);
-            seedMessage(player,"§a已開啟",true,"許可飛行時間 18:00 - 22:00");
+            seedMessage(player,"§a已開啟",false,"許可飛行時間 18:00 - 22:00");
             return;
         }
         if (player.hasPermission(Permission_vip6)){
@@ -47,7 +54,7 @@ public class Player_Fly implements Listener {
             return;
         }
         if (player.hasPermission(Permission_player)){
-            seedMessage(player,"§c已關閉",true,"許可飛行時間 18:00 - 22:00");
+            seedMessage(player,"§c已關閉",false,"許可飛行時間 18:00 - 22:00");
         }
     }
 
@@ -56,6 +63,10 @@ public class Player_Fly implements Listener {
     public void ResidenceChanged(PlayerJumpEvent event) {
         Player player = event.getPlayer();
             if (player.hasPermission(Permission_all)) {
+                player.setAllowFlight(true);
+                return;
+            }
+            if (isweekday() && player.hasPermission(Permission_player)) {
                 player.setAllowFlight(true);
                 return;
             }
@@ -68,6 +79,16 @@ public class Player_Fly implements Listener {
                 return;
             }
         }
+    private boolean isweekday() {
+        LocalDate currentDate = LocalDate.now();
+        if (currentDate.getDayOfWeek() == DayOfWeek.FRIDAY && isFlightAllowedNow(12,23) || isFlightAllowedNow(0,3)){
+            return true;
+        }
+        if (currentDate.getDayOfWeek() == DayOfWeek.SATURDAY && isFlightAllowedNow(12,23) || isFlightAllowedNow(0,3)){
+            return true;
+        }
+        return currentDate.getDayOfWeek() == DayOfWeek.SUNDAY && isFlightAllowedNow(12, 23);
+    }
 
 
     private boolean isFlightAllowedNow(int START,int END) {
@@ -76,19 +97,19 @@ public class Player_Fly implements Listener {
         return currentHour >= START && currentHour <= END;
     }
 
-    void seedMessage(Player player, String message,Boolean chk,String lore) {
-        if (chk) {
-            player.sendMessage(ChatColor.GRAY + "―――――――――――――――――――――");
-            player.sendMessage("   " + message + " §f飛行模式");
+    void seedMessage(Player player, String message,Boolean weekday,String lore) {
+        if (weekday) {
+            player.sendMessage(ChatColor.GRAY + "―――――――――――――――――――――――――");
+            player.sendMessage("   " + message + " §f飛行模式 §7(假日福利)");
             player.sendMessage("§7 ");
             player.sendMessage("    §7" + lore);
-            player.sendMessage(ChatColor.GRAY + "―――――――――――――――――――――");
+            player.sendMessage(ChatColor.GRAY + "―――――――――――――――――――――――――");
         }else {
-            player.sendMessage(ChatColor.GRAY + "―――――――――――――――――――――");
+            player.sendMessage(ChatColor.GRAY + "―――――――――――――――――――――――――");
             player.sendMessage("   " + message + " §f飛行模式");
             player.sendMessage("§7 ");
             player.sendMessage("    §7" + lore);
-            player.sendMessage(ChatColor.GRAY + "―――――――――――――――――――――");
+            player.sendMessage(ChatColor.GRAY + "―――――――――――――――――――――――――");
         }
     }
 

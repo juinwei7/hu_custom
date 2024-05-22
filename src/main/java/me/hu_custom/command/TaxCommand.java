@@ -4,6 +4,8 @@ import me.hu_custom.DataBase.DataBase;
 import me.hu_custom.Main;
 import me.hu_custom.util.Config;
 import me.hu_custom.util.log;
+import net.craftersland.data.bridge.PD;
+import net.craftersland.data.bridge.api.events.SyncCompleteEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -34,6 +36,11 @@ public class TaxCommand implements CommandExecutor, Listener {
         String time_dc = dateFormat.format(time);
 
         if (lable.equalsIgnoreCase("taxcheck")) {
+            if (args.length>=2 && args[0].equals("take") && sender.isOp()){
+                String uuidst = args[1];
+                Manualtax(player,uuidst);
+                return false;
+            }
             if (DataBase.taxBoolean(TABLE,uuid)){  //獲取是否有該玩家在在列表
                 player.sendMessage("§7§m                                      ");
                 player.sendMessage("§a " + player.getName() + " ➜");
@@ -48,7 +55,7 @@ public class TaxCommand implements CommandExecutor, Listener {
     }
 
     @EventHandler
-    void PlayerJoinEvent(PlayerJoinEvent event) {
+    void SyncComplete(SyncCompleteEvent event) {
         Player player = event.getPlayer();
         String world = event.getPlayer().getWorld().getName();
         String uuid = String.valueOf(event.getPlayer().getUniqueId());
@@ -75,6 +82,68 @@ public class TaxCommand implements CommandExecutor, Listener {
                 }
             }else {
                 DataBase.taxsaveData(TABLE,uuid,name,"0",currentTimestamp);
+            }
+        }
+    }
+    private void Manualtax(Player OPplayer,String uuidst) {
+        UUID uuid = UUID.fromString(uuidst);
+        String TABLE = "taxplayer";
+        // 获取当前时间
+        Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+        double pdmon = PD.api.getDatabaseMoney(uuid);
+        if (pdmon != 0) {
+            if (DataBase.taxBoolean(TABLE, uuidst)) {
+                String time = DataBase.taxloadData(TABLE, "expiretime", uuidst);
+                Timestamp playertax = Timestamp.valueOf(time);
+                // 獲取毫秒數表示的時間戳
+                long currentTimeMillis = currentTimestamp.getTime();
+                long playertaxMillis = playertax.getTime();
+                // 計算兩個時間戳之間的毫秒差
+                long differenceMillis = currentTimeMillis - playertaxMillis;
+                // 轉換為天數
+                long differenceDays = differenceMillis / (24 * 60 * 60 * 1000);
+
+                if (differenceDays > 15) { //檢查是否大於15天
+                    double money = PD.api.getDatabaseMoney(uuid);
+                    for (String entry : Config.getTAX_moneylist()) {
+                        String[] parts = entry.split(",");
+                        if (parts.length == 2) {
+                            int amount = Integer.parseInt(parts[0]);
+                            int taxRate = Integer.parseInt(parts[1]);
+                            if (money >= amount) {
+
+                                // 在这里处理税金逻辑，例如扣除税金
+                                double taxAmount = (money * taxRate / 100.0);
+                                double newBalance = money - taxAmount;
+                                PD.api.setDatabaseMoney(uuid, newBalance);
+                                DataBase.taxsaveData(TABLE, uuidst, null, String.valueOf(taxAmount), currentTimestamp);
+                                OPplayer.sendMessage("§f執行完畢，本次扣稅: " + taxAmount + "玩家: " + uuidst);
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    OPplayer.sendMessage("§c該玩家15天內已執行過");
+                }
+            }else {
+                double money = PD.api.getDatabaseMoney(uuid);
+                for (String entry : Config.getTAX_moneylist()) {
+                    String[] parts = entry.split(",");
+                    if (parts.length == 2) {
+                        int amount = Integer.parseInt(parts[0]);
+                        int taxRate = Integer.parseInt(parts[1]);
+                        if (money >= amount) {
+
+                            // 在这里处理税金逻辑，例如扣除税金
+                            double taxAmount = (money * taxRate / 100.0);
+                            double newBalance = money - taxAmount;
+                            PD.api.setDatabaseMoney(uuid, newBalance);
+                            DataBase.taxsaveData(TABLE, uuidst, null, String.valueOf(taxAmount), currentTimestamp);
+                            OPplayer.sendMessage("§f未找到上次扣稅紀錄 / 執行完畢，本次扣稅: " + taxAmount + "玩家: " + uuidst);
+                            break;
+                        }
+                    }
+                }
             }
         }
     }
@@ -108,6 +177,7 @@ public class TaxCommand implements CommandExecutor, Listener {
                                 player.sendMessage(" ");
                                 player.sendMessage("§e執行稅率: " + taxRate + "%");
                                 player.sendMessage("§f================================");
+                                log.log("扣稅玩家: " + player.getName() + "稅前 " + vatint + "稅率 " + taxRate + "%" ,"TaxPlayer");
                                 log.log("扣稅玩家: " + player.getName() + "稅前 " + vatint + "稅率 " + taxRate + "%" ,"TaxPlayer");
                                 String TABLE = "taxplayer";
                                 DataBase.taxsaveData(TABLE,uuid,name, String.valueOf(taxAmount),currentTimestamp);

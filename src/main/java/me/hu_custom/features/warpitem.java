@@ -23,6 +23,12 @@ public class warpitem implements Listener {
 
     private Map<String, Long> cooldownMap = new HashMap<>(); // 记录物品的冷却结束时间
 
+    private final Material[] materials_list = {
+            Material.GOLDEN_SWORD,
+            Material.DIAMOND_SWORD,
+            Material.GOLDEN_AXE
+    };
+
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
@@ -41,6 +47,12 @@ public class warpitem implements Listener {
 
         if (item == null || item.getType().isAir()){
             return;
+        }
+        Material material = item.getType();
+        for (Material m:materials_list){
+            if (m.equals(material)){
+                return;
+            }
         }
 
         if (event.getAction().name().contains("RIGHT") && player.isSneaking()) { // 只在右键点击时触发 && 蹲下
