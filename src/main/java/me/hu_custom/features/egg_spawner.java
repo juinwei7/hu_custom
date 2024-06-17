@@ -10,7 +10,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.SpawnerSpawnEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -52,6 +56,27 @@ public class egg_spawner implements Listener {
                     }
                 }
             }
+        }
+    }
+        @EventHandler
+        public void IE(PlayerInteractEvent event) {
+                ItemStack item = event.getItem();
+                if (item!=null && item.getType().equals(Material.ENDER_DRAGON_SPAWN_EGG)) {
+                    event.setCancelled(true);
+                    item.setAmount(0);
+                    event.getPlayer().sendMessage(Config.getConfig().getString(Config.prefix) + "§c終界龍是不允許被釋放的!");
+        }
+    }
+    @EventHandler
+    public void onPIH(PlayerItemHeldEvent event) {
+        // 獲取玩家的新手持物品槽位
+        int newSlot = event.getNewSlot();
+        ItemStack newItem = event.getPlayer().getInventory().getItem(newSlot);
+
+        // 檢查新手持物是否是終界龍蛋
+        if (newItem != null && newItem.getType() == Material.ENDER_DRAGON_SPAWN_EGG) {
+            newItem.setAmount(0);
+            event.getPlayer().sendMessage(Config.getConfig().getString(Config.prefix) + "§c終界龍是不允許被持有的!");
         }
     }
 }

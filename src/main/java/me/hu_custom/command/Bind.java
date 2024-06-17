@@ -3,6 +3,7 @@ package me.hu_custom.command;
 import de.tr7zw.nbtapi.NBTItem;
 import me.hu_custom.Main;
 import me.hu_custom.util.Config;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -13,6 +14,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Bind implements CommandExecutor {
+    public static ItemMeta unbindedItem(NBTItem nbtItem) {
+        nbtItem.removeKey("BindStatus");
+        ItemMeta itemMeta = nbtItem.getItem().getItemMeta();
+        List<String> lore = itemMeta.getLore();
+        lore.remove(0);
+        for (int i = 0;i<lore.size();i++){
+            if (lore.get(i).contains("綁定留言:")){
+                lore.remove(i);
+            }
+        }
+        itemMeta.setLore(lore);
+        return itemMeta;
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
         if (sender instanceof Player) {
@@ -30,6 +45,19 @@ public class Bind implements CommandExecutor {
 
                 switch (command.getName().toLowerCase()) {
                     case "bind":
+                        String message = null;
+                        boolean CheckMessage = false;
+                        if (args.length >= 1 && args[0] != null) {
+                            message = args[0];
+                            if (args.length >= 2 && args[1] != null) {
+                                    message = args[0] + " " + args[1];
+                            }
+                            if (message.length() <= 15){
+                                CheckMessage = true;
+                            }else {
+                                player.sendMessage("§f〔幻嵐助手〕§r§c綁定留言請勿超過15字(含空格)，已更改成原始綁定!");
+                            }
+                        }
                         if (!nbtItem.hasKey("BindStatus")) {
                             if (playervalue >= value) { //玩家遊戲必須大於條件
                                 Main.econ.withdrawPlayer(player, value);
@@ -41,6 +69,9 @@ public class Bind implements CommandExecutor {
                                 String bindLore = Config.getConfig().getString(Config.BIND_Settings_BindLore1).replace("%playername%", playerName);
                                 // &b✔ &f%playername% &a已綁定
                                 lore.add(0, bindLore);
+                                if (CheckMessage){
+                                    lore.add(1,"§b✔ §f綁定留言: §7" + message);
+                                }
                                 itemMeta.setLore(lore);
                                 item.setItemMeta(itemMeta);
                                 player.setItemInHand(item);
@@ -72,15 +103,6 @@ public class Bind implements CommandExecutor {
             }
         }
         return true;
-    }
-
-    public static ItemMeta unbindedItem(NBTItem nbtItem) {
-        nbtItem.removeKey("BindStatus");
-        ItemMeta itemMeta = nbtItem.getItem().getItemMeta();
-        List<String> lore = itemMeta.getLore();
-        lore.remove(0);
-        itemMeta.setLore(lore);
-        return itemMeta;
     }
 
 }
