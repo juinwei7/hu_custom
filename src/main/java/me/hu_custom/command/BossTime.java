@@ -97,6 +97,9 @@ public class BossTime implements CommandExecutor, Listener {
             if (!MythicBukkit.inst().getMobManager().isMythicMob(bukkitEntity)) {
                 return;
             } //不是myth生物直接返回
+            if (cooldown.isOnCooldown("boss_cooldown")) {
+                return;
+            } //冷卻中 直接返回
 
             List<String> spawner_list = Config.getBossTimeing_SpawnerName();
             for (String spawner : spawner_list) {
@@ -116,19 +119,17 @@ public class BossTime implements CommandExecutor, Listener {
                     }
                 }
             }
-            if (!cooldown.isOnCooldown("boss_cooldown")) {
-                for (Map.Entry<String, Integer> entry : boss_cooldown.entrySet()) {
-                    String sql_bossname = entry.getKey();
-                    Integer cooldown = entry.getValue();
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.add(Calendar.SECOND, cooldown);
-                    Timestamp timestamp = new Timestamp(calendar.getTimeInMillis());
-                    setCooldown("boss_cooldown", 120);
+            for (Map.Entry<String, Integer> entry : boss_cooldown.entrySet()) {
+                String sql_bossname = entry.getKey();
+                Integer cooldown = entry.getValue();
+                Calendar calendar = Calendar.getInstance();
+                calendar.add(Calendar.SECOND, cooldown);
+                Timestamp timestamp = new Timestamp(calendar.getTimeInMillis());
 
-                    DataBase.saveData(sql_bossname, timestamp);
-                }
-                Bukkit.getLogger().info("已執行---boss_cooldown");
+                DataBase.saveData(sql_bossname, timestamp);
             }
+            setCooldown("boss_cooldown", 120);
+            Bukkit.getLogger().info("已執行---boss_cooldown");
         }
 
     }

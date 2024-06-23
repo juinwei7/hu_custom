@@ -34,7 +34,7 @@ public class ChequeMoney implements CommandExecutor , Listener {
                 return false;
             }
             if (noperrPermission != null && player.hasPermission(noperrPermission)) {
-                int sendmoney = 0;
+                int sendmoney = 0; //輸入金額
                 double vat = Main.econ.getBalance(player);
                 int vatint = (int) vat;
 
@@ -50,8 +50,8 @@ public class ChequeMoney implements CommandExecutor , Listener {
                         player.sendMessage(Config.getConfig().getString(Config.prefix) + Config.getConfig().getString(Config.ChequeMoney_message_tointerror));
                         return false;
                     }
-                    double sendmoney_tax = sendmoney*1.05; //x稅率 5%
-                    if(sendmoney_tax < vatint && sendmoney > 1000 && sendmoney < 10000000){ //檢查money是否足夠
+                    double sendmoney_tax = sendmoney*1.08; //x稅率 5%
+                    if(sendmoney_tax < vatint && sendmoney >= 1000 && sendmoney < 10000000){ //檢查money是否足夠
 
                         Main.econ.withdrawPlayer(player, sendmoney_tax);
                         ItemStack itemStack = new ItemStack(hub_item_paper(player,sendmoney));

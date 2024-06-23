@@ -3,7 +3,6 @@ package me.hu_custom.features;
 import de.tr7zw.nbtapi.NBTItem;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -12,12 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 public class NoPlace_haslore implements Listener {
 
@@ -36,9 +30,14 @@ public class NoPlace_haslore implements Listener {
     ItemStack[] item = {
             new ItemStack(Material.PAPER)
     };
+    String[] worldname_list = {
+            "act",
+            "act001"
+    };
 
     @EventHandler
     public void onBlockPlaceEvent(BlockPlaceEvent event) {
+        String worldname = event.getPlayer().getWorld().getName();
         Player player = event.getPlayer();
         ItemStack item = event.getItemInHand();
         ItemMeta itemMeta = item.getItemMeta();
@@ -48,6 +47,11 @@ public class NoPlace_haslore implements Listener {
 
         if(nbti.hasKey("PublicBukkitValues")){ //防止神社件至
             return;
+        }
+        for(String wd_li:worldname_list){
+            if (wd_li.equalsIgnoreCase(worldname)){
+                return;
+            }
         }
 /*
         if (hasPlaceCooldown(playerUUID)) {

@@ -22,14 +22,51 @@ public class err_up_equipment implements Listener {
         Inventory clickedInventory = event.getClickedInventory();
 
         //防止玩家只用鐵砧更動物品
-        if (clickedInventory != null && clickedInventory.getType() == InventoryType.SMITHING || clickedInventory != null && clickedInventory.getType() == InventoryType.ANVIL) {
-            ItemStack resultItem = clickedInventory.getItem(2);
-            ItemStack resultItem0 = clickedInventory.getItem(0);
+        if (clickedInventory != null && clickedInventory.getType() == InventoryType.SMITHING || clickedInventory != null && clickedInventory.getType() == InventoryType.ANVIL || clickedInventory != null && clickedInventory.getType() == InventoryType.GRINDSTONE) {
+            String message = Config.getConfig().getString(Config.prefix) + Config.getConfig().getString(Config.smithing_table_message);
+            ItemStack clickitem = event.getCurrentItem();
 
+            if (clickitem != null && clickedInventory.getType() != InventoryType.SMITHING){
+                if (clickitem.hasItemMeta() && clickitem.getItemMeta().hasLore()){
+                    event.getWhoClicked().sendMessage(message);
+                    event.setCancelled(true);
+                    event.getWhoClicked().closeInventory();
+                }
+            }
+            if (clickitem != null && clickedInventory.getType() != InventoryType.SMITHING){
+                if (event.isShiftClick()) {
+                    if (clickitem.hasItemMeta() && clickitem.getItemMeta().hasLore()) {
+                        event.getWhoClicked().sendMessage(message);
+                        event.setCancelled(true);
+                        event.getWhoClicked().closeInventory();
+                    }
+                }
+            }
+
+
+            if (clickedInventory.getType() == InventoryType.SMITHING){
+                int solt = event.getRawSlot();
+                if (event.isShiftClick() && solt==3){
+                    event.getWhoClicked().sendMessage(Config.getConfig().getString(Config.prefix) + "§c升級裝備不開放 Shift 點擊");
+                    event.setCancelled(true);
+                    return;
+                }
+                ItemStack resultItem_0 = clickedInventory.getItem(0);
+                ItemStack resultItem_1 = clickedInventory.getItem(1);
+                if (resultItem_0 != null && resultItem_0.getType().equals(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE)){
+                    if (resultItem_1 != null && resultItem_1.hasItemMeta() && resultItem_1.getItemMeta().hasLore()) {
+                        event.getWhoClicked().sendMessage(message);
+                        event.setCancelled(true);
+                        event.getWhoClicked().closeInventory();
+                    }
+                }
+            }
+
+            /*
             if (resultItem != null) {
                 if (resultItem0 != null) {
                     ItemMeta item = resultItem.getItemMeta();
-                    String message = Config.getConfig().getString(Config.prefix) + Config.getConfig().getString(Config.smithing_table_message);
+                    String message = Ceonfig.getConfig().getString(Config.prefix) + Config.getConfig().getString(Config.smithing_table_message);
                     if (item.hasLore()) {
                         event.setCancelled(true);
                         event.getWhoClicked().closeInventory();
@@ -38,6 +75,8 @@ public class err_up_equipment implements Listener {
                     }
                 }
             }
+
+             */
         }
         //防止玩家複製地圖畫 書本
         if (clickedInventory != null && clickedInventory.getType() == InventoryType.CARTOGRAPHY || clickedInventory != null && clickedInventory.getType() == InventoryType.WORKBENCH) {
