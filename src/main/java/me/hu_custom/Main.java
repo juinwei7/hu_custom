@@ -46,8 +46,13 @@ public final class Main extends JavaPlugin {
         dataBase = new DataBase(getConfig());
         System.out.println("hu_cou 啟動成功");
 
-        SafariNetListener safarinetListener = new SafariNetListener();
-        SafariNet.addListener(safarinetListener);
+        if (hasplugin("Residence")) {
+            SafariNetListener safarinetListener = new SafariNetListener();
+            SafariNet.addListener(safarinetListener);
+            getServer().getPluginManager().registerEvents(new Rule(), this);
+        }else {
+            Bukkit.getLogger().info("未檢測到Residence，不加載相關功能");
+        }
 
 
         getServer().getPluginManager().registerEvents(new Equipment_rollCommand(), this);
@@ -67,7 +72,6 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new TaxCommand(), this);
         getServer().getPluginManager().registerEvents(new warpitem(), this);
         getServer().getPluginManager().registerEvents(new Player_Fly(), this);
-        getServer().getPluginManager().registerEvents(new Rule(), this);
         getServer().getPluginManager().registerEvents(new NO_Drop(inst), this);
 
         getServer().getPluginManager().registerEvents(new check_perr(), this);
@@ -125,6 +129,10 @@ public final class Main extends JavaPlugin {
         }
         econ = rsp.getProvider();
         return econ != null;
+    }
+
+    private boolean hasplugin(String plugin) {
+        return getServer().getPluginManager().getPlugin(plugin) != null;
     }
 
 

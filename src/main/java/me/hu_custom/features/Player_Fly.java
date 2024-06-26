@@ -1,18 +1,14 @@
 package me.hu_custom.features;
 
-import com.bekvon.bukkit.residence.Residence;
-import com.bekvon.bukkit.residence.event.ResidenceChangedEvent;
+
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
-import me.hu_custom.Main;
-import org.bukkit.Bukkit;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerToggleFlightEvent;
-import org.bukkit.event.player.PlayerToggleSprintEvent;
+
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;

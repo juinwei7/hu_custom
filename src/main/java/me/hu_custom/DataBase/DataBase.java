@@ -7,7 +7,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class DataBase {
     private static HikariDataSource dataSource = null;
@@ -36,18 +35,31 @@ public class DataBase {
     }
 
 
-    private void createTable() {
-        String query = "CREATE TABLE IF NOT EXISTS `bosstime` (timeboss VARCHAR(36) PRIMARY KEY, expiretime TIMESTAMP);";
-        String taxbase = "CREATE TABLE IF NOT EXISTS `taxplayer` (uuid VARCHAR(36) PRIMARY KEY, name VARCHAR(36), taxmoney VARCHAR(36), expiretime TIMESTAMP);";
-        try (Connection connection = dataSource.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement(query);
-            PreparedStatement taxstatement = connection.prepareStatement(taxbase);
+    /*
+        cheque 辨識碼查詢
+    */
+    public static boolean chequeBooldean(String TABLE ,String Identification) {
+        try {
+            Connection connection = dataSource.getConnection();
 
-            statement.executeUpdate();
-            taxstatement.executeUpdate();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
+
+            // 检查是否存在相同 identification 记录
+            String checkQuery = "SELECT identification FROM " + TABLE + " WHERE identification = ?";
+            try (PreparedStatement checkStatement = connection.prepareStatement(checkQuery)) {
+                checkStatement.setString(1, Identification);
+                ResultSet resultSet = checkStatement.executeQuery();
+
+                // 如果结果集包含数据，则说明 identification 存在
+                boolean exists = resultSet.next();
+
+                resultSet.close();
+                connection.close();
+                return exists;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return false;
     }
 
     /*
@@ -215,6 +227,93 @@ public class DataBase {
 
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    /*
+        cheque 辨識碼存入
+    */
+    //(identification VARCHAR(36) PRIMARY KEY, name VARCHAR(36), taxmoney VARCHAR(36), expiretime TIMESTAMP);";
+    public static void chequesaveData(String TABLE,String Identification, String cheque_money, String name, Timestamp name_time) {
+        try (Connection connection = dataSource.getConnection()) {
+
+            // 首先检查是否存在相同 identification 记录
+            String checkQuery = "SELECT identification FROM " + TABLE + " WHERE identification = ?";
+            try (PreparedStatement checkStatement = connection.prepareStatement(checkQuery)) {
+                checkStatement.setString(1, Identification);
+                try (ResultSet resultSet = checkStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        // 存在相同 identification 紀錄，執行更新操作
+                        String updateQuery = "UPDATE " + TABLE + " SET name_use = ?, name_use_time = ? WHERE identification = ?";
+                        try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
+                            preparedStatement.setString(1, name);
+                            preparedStatement.setTimestamp(2, name_time);
+                            preparedStatement.setString(3, Identification);
+                            preparedStatement.executeUpdate(); // 执行更新操作
+                        }
+                    } else {
+                        // 不存在相同 identification 紀錄，執行插入操作
+                        String insertQuery = "INSERT INTO " + TABLE + " (identification, cheque_money, name, name_time) VALUES (?, ?, ?, ?)";
+                        try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+                            preparedStatement.setString(1, Identification);
+                            preparedStatement.setString(2, cheque_money);
+                            preparedStatement.setString(3, name);
+                            preparedStatement.setTimestamp(4, name_time);
+                            preparedStatement.executeUpdate(); // 執行插入操作
+                        }
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //TABLE
+    //search_field 想要的答案
+    //target 要符合條件才能提供答案
+    public static String chequeloadData(String TABLE, String search_field, String target) {
+        String ans = null;
+
+        try {
+            Connection connection = dataSource.getConnection();
+
+            String selectQuery = "SELECT " + search_field + " FROM " + TABLE + " WHERE identification = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(selectQuery);
+            preparedStatement.setString(1, target);  // 设置 identification 参数
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            // 检查是否有结果
+            if (resultSet.next()) {
+                ans = resultSet.getString(search_field);  // 替换 "data_column" 为实际的数据列名
+            }
+
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return ans;  // 返回从数据库中检索到的数据
+    }
+
+    private void createTable() {
+        String query = "CREATE TABLE IF NOT EXISTS `bosstime` (timeboss VARCHAR(36) PRIMARY KEY, expiretime TIMESTAMP);";
+        String taxbase = "CREATE TABLE IF NOT EXISTS `taxplayer` (uuid VARCHAR(36) PRIMARY KEY, name VARCHAR(36), taxmoney VARCHAR(36), expiretime TIMESTAMP);";
+        String chequemoney = "CREATE TABLE IF NOT EXISTS `chequemoney` (identification VARCHAR(36) PRIMARY KEY, cheque_money VARCHAR(36), name VARCHAR(36), name_time TIMESTAMP, name_use VARCHAR(36), name_use_time TIMESTAMP);";
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(query);
+            PreparedStatement taxstatement = connection.prepareStatement(taxbase);
+            PreparedStatement chequemoneyment = connection.prepareStatement(chequemoney);
+
+            statement.executeUpdate();
+            taxstatement.executeUpdate();
+            chequemoneyment.executeUpdate();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
         }
     }
 
