@@ -40,14 +40,15 @@ public class NoPlace_haslore implements Listener {
         String worldname = event.getPlayer().getWorld().getName();
         Player player = event.getPlayer();
         ItemStack item = event.getItemInHand();
+        if (item == null){return;}
         ItemMeta itemMeta = item.getItemMeta();
         String itemid = String.valueOf(item.getType());
 
         NBTItem nbti = new NBTItem(item);
 
-        if(nbti.hasKey("PublicBukkitValues")){ //防止神社件至
-            return;
-        }
+
+        if(nbti.hasKey("PublicBukkitValues")){return;} //防止神社放置
+        if (item.getType().equals(Material.FLINT_AND_STEEL)){return;} //防止打火機放置
         for(String wd_li:worldname_list){
             if (wd_li.equalsIgnoreCase(worldname)){
                 return;

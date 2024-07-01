@@ -1,5 +1,6 @@
 package me.hu_custom.command;
 
+import me.hu_custom.util.Luckperms_hook;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.model.user.User;
@@ -47,11 +48,11 @@ public class NO_Drop implements CommandExecutor, Listener {
         UUID uuid = player.getUniqueId();
         if (label.equalsIgnoreCase("dr")) {
             if (player.hasPermission(Permission)) {
-                removeperr(player,Permission);
+                Luckperms_hook.removeperr(player,Permission);
                 seedMessage(player, "§c已關閉");
                 return true; // 如果命令执行成功，返回 true
             } else {
-                addperr(player,Permission);
+                Luckperms_hook.addperr(player,Permission);
                 seedMessage(player, "§a已開啟");
             }
         }
@@ -102,30 +103,5 @@ public class NO_Drop implements CommandExecutor, Listener {
         player.sendMessage("   " + message + " §f防丟棄");
         player.sendMessage(ChatColor.GRAY + "――――――――――――――――");
         // 或者使用 player.sendMessage(ChatColor.RED + "已開啟防丟棄");
-    }
-
-    private void addperr(Player player, String permission) {
-        LuckPerms luckPerms = LuckPermsProvider.get();
-
-        // 获取用户对象
-        User user = luckPerms.getUserManager().getUser(player.getUniqueId());
-
-        // 添加权限节点
-        user.data().add(Node.builder(permission).build());
-
-        // 保存用户数据
-        luckPerms.getUserManager().saveUser(user);
-    }
-    private void removeperr(Player player, String permission) {
-        LuckPerms luckPerms = LuckPermsProvider.get();
-
-        // 获取用户对象
-        User user = luckPerms.getUserManager().getUser(player.getUniqueId());
-
-        // 添加权限节点
-        user.data().remove(Node.builder(permission).build());
-
-        // 保存用户数据
-        luckPerms.getUserManager().saveUser(user);
     }
 }

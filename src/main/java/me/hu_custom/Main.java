@@ -77,6 +77,7 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new check_perr(), this);
         getServer().getPluginManager().registerEvents(new BossTime(), this);
         getServer().getPluginManager().registerEvents(new BuffCommand(), this);
+        getServer().getPluginManager().registerEvents(new sx_bag_perr(), this);
 
 
 

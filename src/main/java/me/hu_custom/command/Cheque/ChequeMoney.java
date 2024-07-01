@@ -122,7 +122,7 @@ public class ChequeMoney implements CommandExecutor , Listener {
             updatedLore.add(loreLine);
         }
 
-        if (value > 3000000){
+        if (value > 500000){
             updatedLore.add(" ");
             updatedLore.add("§7大額支票辨識碼: " + Identification);
         }
@@ -145,7 +145,7 @@ public class ChequeMoney implements CommandExecutor , Listener {
         nbt1.setString("hub_player", player_id);
         nbt1.setString("hub_uuid", uuid);
 
-        if (value > 3000000) {nbt1.setString("hub_identification", Identification);}
+        if (value > 500000) {nbt1.setString("hub_identification", Identification);}
 
         log.log("創建金額 " + value_String + ", " + player.getName() ,"ChequeMoney");
 

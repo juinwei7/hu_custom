@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,35 +45,35 @@ public class Rule implements Listener {
     }
 
     @EventHandler
-    public void Rule_EDBE(EntityDamageByEntityEvent event) {
-        // 檢查攻擊者是否為玩家
-        if (event.getDamager() instanceof Player) {
-            Player player = (Player) event.getDamager();
+    public void Rule_EDBE(PlayerJoinEvent event) {
 
-            int ping = player.getPing();
+            Player player = event.getPlayer();
 
-            if (player.hasPermission("bossshop.current.vip")) {
-                if (check_cooldown(player, 2, 3)) {
-                    if (ping > 120) {
-                        PING_cooldowns.put(player.getUniqueId(), System.currentTimeMillis());
-                        player.sendMessage("§7§m                                           §r");
-                        player.sendMessage("");
-                        player.sendMessage("§f〔提醒〕§e您的PING值高於正常水平，建議您開客服單領取新的進入(IP)節點!");
-                        player.sendMessage("§f〔提醒〕§eDISCORD ➡ https://discord.huanlan.org/");
-                        player.sendMessage("");
-                        player.sendMessage("§7§m                                           §r");
+            if (player != null) {
+                int ping = player.getPing();
+
+                if (player.hasPermission("bossshop.current.vip")) {
+                    if (check_cooldown(player, 2, 3)) {
+                        if (ping > 160) {
+                            PING_cooldowns.put(player.getUniqueId(), System.currentTimeMillis());
+                            player.sendMessage("§7§m                                           §r");
+                            player.sendMessage("");
+                            player.sendMessage("§f〔提醒〕§e您的PING值高於正常水平，建議您開客服單領取新的進入(IP)節點!");
+                            player.sendMessage("§f〔提醒〕§eDISCORD ➡ https://discord.huanlan.org/");
+                            player.sendMessage("");
+                            player.sendMessage("§7§m                                           §r");
+                        }
                     }
-                }
             }
         }
     }
 
-    private boolean check_cooldown(Player player,int type,long multiple){
+    private boolean check_cooldown(Player player,int type,double multiple){
 
         if (type==1){
             if (Rule_cooldowns.containsKey(player.getUniqueId())) {
-                long cooldownExpiration = Rule_cooldowns.get(player.getUniqueId()) + (COOLDOWN_TIME_SECONDS * 1000 * multiple);
-                long currentTime = System.currentTimeMillis();
+                double cooldownExpiration = (double)(Rule_cooldowns.get(player.getUniqueId()) + (COOLDOWN_TIME_SECONDS * 1000 * multiple));
+                double currentTime = System.currentTimeMillis();
                 return currentTime > cooldownExpiration;
             }else {
                 return true;
@@ -80,8 +81,8 @@ public class Rule implements Listener {
         }
         if (type==2){
             if (PING_cooldowns.containsKey(player.getUniqueId())) {
-                long cooldownExpiration = Rule_cooldowns.get(player.getUniqueId()) + (COOLDOWN_TIME_SECONDS * 1000 * multiple);
-                long currentTime = System.currentTimeMillis();
+                double cooldownExpiration = (double)(Rule_cooldowns.get(player.getUniqueId()) + (COOLDOWN_TIME_SECONDS * 1000 * multiple));
+                double currentTime = System.currentTimeMillis();
                 return currentTime > cooldownExpiration;
             }else {
                 return true;

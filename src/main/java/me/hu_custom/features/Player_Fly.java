@@ -12,7 +12,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 public class Player_Fly implements Listener {
 
@@ -20,11 +23,28 @@ public class Player_Fly implements Listener {
     String Permission_vip6 = "canfaly.vip6";
     String Permission_player = "canfaly.player";
 
+    List<String> world_list = new ArrayList<>(Arrays.asList(
+            "stst",
+            "stst02",
+            "stst03"
+    ));
+    private boolean notfly_world(String worldname){
+        for (String wd_line:world_list){
+            if (wd_line.equalsIgnoreCase(worldname)){
+                return false;
+            }
+        }
+        return true;
+    }
 
 
     @EventHandler
     public void PlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+
+        String worldname = event.getPlayer().getWorld().getName();
+        if (!notfly_world(worldname)){return;}
+
         if (player.hasPermission(Permission_all)){
             player.setAllowFlight(true);
             seedMessage(player,"§a已開啟",false,"許可飛行時間 無限制");
@@ -58,6 +78,10 @@ public class Player_Fly implements Listener {
     @EventHandler
     public void ResidenceChanged(PlayerJumpEvent event) {
         Player player = event.getPlayer();
+
+            String worldname = event.getPlayer().getWorld().getName();
+            if (!notfly_world(worldname)){return;}
+
             if (player.hasPermission(Permission_all)) {
                 player.setAllowFlight(true);
                 return;
