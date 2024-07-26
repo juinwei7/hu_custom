@@ -3,6 +3,7 @@ package me.hu_custom.util;
 import jdk.javadoc.internal.tool.Main;
 import lombok.Getter;
 import me.hu_custom.command.Cheque.ChequeExp;
+import me.hu_custom.command.Cheque.ChequeHub;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -66,7 +67,7 @@ public class Config {
     //支票系統
     public static final String ChequeMoney_enabled = "ChequeMoney.enabled";
     public static final String ChequeMoney_discordnb = "ChequeMoney.discordnb";
-    public static final String ChequeMoney_perr = "ChequeMoney.ChequeMoney_perr";
+    public static final String ChequeMoney_perr = "ChequeMoney.Cheque_perr";
     public static final String ChequeMoney_message_noperr = "ChequeMoney.message.noperr";
     public static final String ChequeMoney_message_tointerror = "ChequeMoney.message.tointerror";
     public static final String ChequeMoney_message_nomoney = "ChequeMoney.message.nomoney";
@@ -77,7 +78,7 @@ public class Config {
 
     public static final String ChequeExp_enabled = "ChequeExp.enabled";
     public static final String ChequeExp_discordnb = "ChequeExp.discordnb";
-    public static final String ChequeExp_perr = "ChequeExp.ChequeExp_perr";
+    public static final String ChequeExp_perr = "ChequeExp.Cheque_perr";
     public static final String ChequeExp_message_noperr = "ChequeExp.message.noperr";
     public static final String ChequeExp_message_tointerror = "ChequeExp.message.tointerror";
     public static final String ChequeExp_message_nomoney = "ChequeExp.message.nomoney";
@@ -85,6 +86,19 @@ public class Config {
     public static final String ChequeExp_message_cooldown = "ChequeExp.message.cooldown";
     public static final String ChequeExp_chequeitem_name = "ChequeExp.chequeitem.name";
     public static final String ChequeExp_chequeitem_lore = "ChequeExp.chequeitem.lore";
+
+    public static final String ChequeHub_enabled = "ChequeHub.enabled";
+    public static final String ChequeHub_discordnb = "ChequeHub.discordnb";
+    public static final String ChequeHub_perr = "ChequeHub.Cheque_perr";
+    public static final String ChequeHub_message_noperr = "ChequeHub.message.noperr";
+    public static final String ChequeHub_message_tointerror = "ChequeHub.message.tointerror";
+    public static final String ChequeHub_message_is_10multiple = "ChequeHub.message.is_10multiple";
+    public static final String ChequeHub_message_nomoney = "ChequeHub.message.nomoney";
+    public static final String ChequeHub_message_bag_max = "ChequeHub.message.bag_max";
+    public static final String ChequeHub_message_success = "ChequeHub.message.success";
+    public static final String ChequeHub_message_cooldown = "ChequeHub.message.cooldown";
+    public static final String ChequeHub_chequeitem_name = "ChequeHub.chequeitem.name";
+    public static final String ChequeHub_chequeitem_lore = "ChequeHub.chequeitem.lore";
 
 
     @Getter
@@ -96,6 +110,8 @@ public class Config {
     private static List<String> ChequeMoneyitemList;
     @Getter
     private static List<String> ChequeExpitemList;
+    @Getter
+    private static List<String> ChequeHubitemList;
 
     @Getter
     private static List<String> Equipment_list;
@@ -127,6 +143,8 @@ public class Config {
     @Getter
     private static boolean ChequeExpenabled;
     @Getter
+    private static boolean ChequeHubenabled;
+    @Getter
     private static boolean Equipmentenabled;
 
 
@@ -147,11 +165,13 @@ public class Config {
         clock = config.getBoolean(clock_enabled);
         ChequeMoneyenabled = config.getBoolean(ChequeMoney_enabled);
         ChequeExpenabled = config.getBoolean(ChequeExp_enabled);
+        ChequeHubenabled = config.getBoolean(ChequeHub_enabled);
         Equipmentenabled = config.getBoolean(Equipment_enabled);
 
         COMMANDList = config.getStringList(COMMAND);
         ChequeMoneyitemList = config.getStringList(ChequeMoney_chequeitem_lore);
         ChequeExpitemList = config.getStringList(ChequeExp_chequeitem_lore);
+        ChequeHubitemList = config.getStringList(ChequeHub_chequeitem_lore);
         Equipment_list = config.getStringList(Equipment_Equipment_list);
         TAX_moneylist = config.getStringList(TAX_money_list);
         BossTimeing_TimeCooldown = config.getStringList(BossTimeing_TimeCooldown_list);

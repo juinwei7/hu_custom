@@ -6,8 +6,8 @@ import me.hu_custom.Main;
 import me.hu_custom.util.Config;
 import me.hu_custom.util.cooldown;
 import me.hu_custom.util.log;
+import org.black_ixx.playerpoints.PlayerPoints;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -26,10 +26,9 @@ import java.util.*;
 
 import static io.lumine.mythic.core.utils.RandomUtil.random;
 
+public class ChequeHub implements CommandExecutor, Listener {
 
-public class ChequeMoney implements CommandExecutor , Listener {
-
-    static String database_name = "chequemoney";
+    static String database_name = "chequehub";
 
     public static String generateRandomString(int Number) {
         StringBuilder sb = new StringBuilder(Number);
@@ -43,71 +42,79 @@ public class ChequeMoney implements CommandExecutor , Listener {
 
     public boolean onCommand(CommandSender sender, Command cmd, String lable, String[] args) {
         Player player = (Player) sender;
-        String noperrPermission = Config.getConfig().getString(Config.ChequeMoney_perr);
+        UUID uuid = player.getUniqueId();
+        String noperrPermission = Config.getConfig().getString(Config.ChequeHub_perr);
 
-        if (lable.equalsIgnoreCase("chequemoney")) {
-            if(!Config.isChequeMoneyenabled()){
-                player.sendMessage(Config.getConfig().getString(Config.prefix) + Config.getConfig().getString(Config.ChequeMoney_message_noperr));
+        if (lable.equalsIgnoreCase("chequehub")) {
+            if(!Config.isChequeHubenabled()){
+                player.sendMessage(Config.getConfig().getString(Config.prefix) + Config.getConfig().getString(Config.ChequeHub_message_noperr));
                 return false;
             }
             if (noperrPermission != null && player.hasPermission(noperrPermission)) {
-                int sendmoney = 0; //輸入金額
-                double vat = Main.econ.getBalance(player);
-                int vatint = (int) vat;
+                int sendhub = 0; //輸入金額
+                int points = PlayerPoints.getInstance().getAPI().look(uuid);
 
                 if (args.length == 0) {
-                    player.sendMessage(Config.getConfig().getString(Config.prefix) + Config.getConfig().getString(Config.ChequeMoney_message_tointerror));
+                    player.sendMessage(Config.getConfig().getString(Config.prefix) + Config.getConfig().getString(Config.ChequeHub_message_tointerror));
                     return true;
                 }
                 if (args.length == 1) {
                     try {
-                        sendmoney = Integer.parseInt(args[0]);
+                        sendhub = Integer.parseInt(args[0]);
                         // 現在你可以使用整數變數 secondArg 來處理第二個參數
                     } catch (NumberFormatException e) {
-                        player.sendMessage(Config.getConfig().getString(Config.prefix) + Config.getConfig().getString(Config.ChequeMoney_message_tointerror));
+                        player.sendMessage(Config.getConfig().getString(Config.prefix) + Config.getConfig().getString(Config.ChequeHub_message_tointerror));
                         return false;
                     }
-                    double sendmoney_tax = sendmoney*1.08; //x稅率 8%
-                    if(sendmoney_tax < vatint && sendmoney >= 1000 && sendmoney < 10000000){ //檢查money是否足夠
+                    if (sendhub%10!=0 || sendhub<100 || sendhub>5000){ //確認須為10的倍數
+                        player.sendMessage(Config.getConfig().getString(Config.prefix) + Config.getConfig().getString(Config.ChequeHub_message_is_10multiple));
+                        return false;
+                    }
+                    if (player.getInventory().firstEmpty() == -1) { // 背包已满，取消添加物品的操作
+                        player.sendMessage(Config.getConfig().getString(Config.prefix) + Config.getConfig().getString(Config.ChequeHub_message_bag_max));
+                        return false;
+                    }
+                    double sendhub_tax = sendhub*1.10; //x稅率 10%
+                    if(sendhub_tax <= points){ //檢查hub是否足夠
 
                         String Identification = generateRandomString(10);
                         Calendar calendar = Calendar.getInstance();
                         Timestamp timestamp = new Timestamp(calendar.getTimeInMillis());
 
-                        Main.econ.withdrawPlayer(player, sendmoney_tax);
-                        ItemStack itemStack = new ItemStack(hub_item_paper(player,sendmoney,Identification)); //製作支票(含辨識碼8位數)
+                        PlayerPoints.getInstance().getAPI().take(uuid, (int) sendhub_tax);
+                        ItemStack itemStack = new ItemStack(hub_item_paper(player,sendhub,Identification)); //製作支票(含辨識碼8位數)
                         player.getInventory().addItem(itemStack);
-                        DataBase.chequesaveData(database_name,Identification,player.getName(), String.valueOf(sendmoney),timestamp);
-                        player.sendMessage(Config.getConfig().getString(Config.prefix) + "§a成功創建支票，金額 $" + sendmoney);
-                        String commandToExecute = "discordsrv broadcast #" + Config.getConfig().getString(Config.ChequeMoney_discordnb) + " :blue_square: 創建遊戲幣支票 " + player.getName() + ", " + sendmoney; // 替换为你想要执行的命令
+                        DataBase.chequesaveData(database_name,Identification,player.getName(), String.valueOf(sendhub),timestamp);
+                        player.sendMessage(Config.getConfig().getString(Config.prefix) + "§a成功創建支票，金額 $" + sendhub);
+                        String commandToExecute = "discordsrv broadcast #" + Config.getConfig().getString(Config.ChequeHub_discordnb) + " :blue_square: 創建幻幣支票 " + player.getName() + ", " + sendhub; // 替换为你想要执行的命令
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commandToExecute);
                     }else {
-                        player.sendMessage(Config.getConfig().getString(Config.prefix) + Config.getConfig().getString(Config.ChequeMoney_message_nomoney));
+                        player.sendMessage(Config.getConfig().getString(Config.prefix) + Config.getConfig().getString(Config.ChequeHub_message_nomoney));
                     }
 
                 }else {
-                    player.sendMessage(Config.getConfig().getString(Config.prefix) + Config.getConfig().getString(Config.ChequeMoney_message_tointerror));
+                    player.sendMessage(Config.getConfig().getString(Config.prefix) + Config.getConfig().getString(Config.ChequeHub_message_tointerror));
                 }
 
             }else {
-                player.sendMessage(Config.getConfig().getString(Config.prefix) + Config.getConfig().getString(Config.ChequeMoney_message_noperr));
+                player.sendMessage(Config.getConfig().getString(Config.prefix) + Config.getConfig().getString(Config.ChequeHub_message_noperr));
             }
         }
 
         return false;
     }
 
-    public ItemStack hub_item_paper(Player player,int value,String Identification) {
+    private ItemStack hub_item_paper(Player player,int value,String Identification) {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:00");
         Date currentTime = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(currentTime);
-        calendar.add(Calendar.DAY_OF_YEAR, 40); //時間延遲
+        calendar.add(Calendar.DAY_OF_YEAR, 8); //時間延遲
         Date expirationTime = calendar.getTime();
 
 
-        List<String> itemlore = Config.getChequeMoneyitemList();
+        List<String> itemlore = Config.getChequeHubitemList();
 
         String currentTimeStr = sdf.format(currentTime);
         String expirationTimeStr = sdf.format(expirationTime);
@@ -118,18 +125,15 @@ public class ChequeMoney implements CommandExecutor , Listener {
             loreLine = loreLine.replace("%player%", player.getName());
             loreLine = loreLine.replace("%time%", currentTimeStr);
             loreLine = loreLine.replace("%over_time%", expirationTimeStr);
-            loreLine = loreLine.replace("%Money_value%",value_String);
+            loreLine = loreLine.replace("%hub_value%",value_String);
+            loreLine = loreLine.replace("%hub_number%",Identification);
             updatedLore.add(loreLine);
         }
 
-        if (value > 100000){
-            updatedLore.add(" ");
-            updatedLore.add("§7大額支票辨識碼: " + Identification);
-        }
 
         ItemStack itemStack = new ItemStack(Material.PAPER);
         ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setDisplayName(Config.getConfig().getString(Config.ChequeMoney_chequeitem_name).replace("%Money_value%",value_String));
+        itemMeta.setDisplayName(Config.getConfig().getString(Config.ChequeHub_chequeitem_name).replace("%hub_value%",value_String));
         itemMeta.setLore(updatedLore);
         itemStack.setItemMeta(itemMeta);
 
@@ -139,21 +143,20 @@ public class ChequeMoney implements CommandExecutor , Listener {
         String uuid = String.valueOf(player.getUniqueId());
 
         NBTItem nbt1 = new NBTItem(itemStack);
-        nbt1.setString("hu_ItemName","ChequeMoney");
-        nbt1.setInteger("CustomModelData", 2001);
-        nbt1.setInteger("money_value", value);
+        nbt1.setString("hu_ItemName","ChequeHub");
+        nbt1.setInteger("CustomModelData", 2000);
+        nbt1.setInteger("hub_value", value);
         nbt1.setString("hub_player", player_id);
         nbt1.setString("hub_uuid", uuid);
+        nbt1.setString("hub_identification", Identification);
 
-        if (value > 100000) {nbt1.setString("hub_identification", Identification);}
 
-        log.log("創建金額 " + value_String + ", " + player.getName() ,"ChequeMoney");
+
+        log.log("創建金額 " + value_String + ", " + player.getName() ,"ChequeHub");
 
         return nbt1.getItem(); // 返回带有更新描述的物品堆栈
 
     }
-
-
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
@@ -171,13 +174,13 @@ public class ChequeMoney implements CommandExecutor , Listener {
         if (event.getAction().name().contains("RIGHT")) { // 只在右键点击时触发
             if (!item.getType().isAir()) {
                 NBTItem nbti = new NBTItem(item);
-                if (nbti.hasKey("hu_ItemName") && nbti.getString("hu_ItemName").equals("ChequeMoney")) {
-                    if (!cooldown.isOnCooldown("ChequeMoney")) {
+                if (nbti.hasKey("hu_ItemName") && nbti.getString("hu_ItemName").equals("ChequeHub")) {
+                    if (!cooldown.isOnCooldown("ChequeHub")) {
 
                         /*
                           處理大額支票 辨識碼
                          */
-                        int value = nbti.getInteger("money_value");
+                        int value = nbti.getInteger("hub_value");
                         String hub_player = nbti.getString("hub_player");
                         if (nbti.hasTag("hub_identification")){
                             String identification = nbti.getString("hub_identification");
@@ -185,9 +188,9 @@ public class ChequeMoney implements CommandExecutor , Listener {
                                 String name_use = DataBase.chequeloadData(database_name,"name_use",identification);
                                 if (name_use!=null){
                                     player.sendMessage("§f該支票已被使用，使用玩家 " + name_use);
-                                    String commandToExecute = "discordsrv broadcast #" + Config.getConfig().getString(Config.ChequeMoney_discordnb) + " :rotating_light: 正在嘗試使用用過的支票 " + player.getName() + ", 辨識碼" + identification; // 替换为你想要执行的命令
+                                    String commandToExecute = "discordsrv broadcast #" + Config.getConfig().getString(Config.ChequeHub_discordnb) + " :rotating_light: 正在嘗試使用用過的支票 " + player.getName() + ", 辨識碼" + identification; // 替换为你想要执行的命令
                                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commandToExecute);
-                                    cooldown.setCooldown("ChequeMoney", 4);
+                                    cooldown.setCooldown("ChequeHub", 4);
                                     return;
                                 }else {
                                     Calendar calendar = Calendar.getInstance();
@@ -196,9 +199,9 @@ public class ChequeMoney implements CommandExecutor , Listener {
                                 }
                             }else {
                                 player.sendMessage("§c該支票無創建紀錄，請截圖並開客服單詢問");
-                                String commandToExecute = "discordsrv broadcast #" + Config.getConfig().getString(Config.ChequeMoney_discordnb) + " :rotating_light: 正在嘗試使用未知的支票 " + player.getName() + ", 辨識碼" + identification; // 替换为你想要执行的命令
+                                String commandToExecute = "discordsrv broadcast #" + Config.getConfig().getString(Config.ChequeHub_discordnb) + " :rotating_light: 正在嘗試使用未知的支票 " + player.getName() + ", 辨識碼" + identification; // 替换为你想要执行的命令
                                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commandToExecute);
-                                cooldown.setCooldown("ChequeMoney", 4);
+                                cooldown.setCooldown("ChequeHub", 4);
                                 return;
                             }
                         }
@@ -207,25 +210,25 @@ public class ChequeMoney implements CommandExecutor , Listener {
 
                         item.setAmount(item.getAmount() - 1);
 
-                        double points_D = Main.econ.getBalance(player);
+                        int points = PlayerPoints.getInstance().getAPI().look(player.getUniqueId());
+                        PlayerPoints.getInstance().getAPI().give(player.getUniqueId(), value);
 
-                        Main.econ.depositPlayer(player, value);
-                        double points01 = Main.econ.getBalance(player);
+                        int points_ans = PlayerPoints.getInstance().getAPI().look(player.getUniqueId());
 
-                        log.log("核銷金額 " + value + ", " + player.getName() + " ， 生成者: " + hub_player, "ChequeMoney");
+                        log.log("核銷金額 " + value + ", " + player.getName() + " ， 生成者: " + hub_player, "ChequeHub");
 
                         player.sendMessage("§7============================");
-                        player.sendMessage(Config.getConfig().getString(Config.ChequeMoney_message_success));
-                        player.sendMessage("提取前擁有: $" + points_D);
-                        player.sendMessage("提取後擁有: $" + points01);
+                        player.sendMessage(Config.getConfig().getString(Config.ChequeHub_message_success));
+                        player.sendMessage("提取前擁有: ✡" + points);
+                        player.sendMessage("提取後擁有: ✡" + points_ans);
                         player.sendMessage("");
                         player.sendMessage("§c若領取失敗，請開客服單並提供截圖。");
                         player.sendMessage("§7=============================");
-                        cooldown.setCooldown("ChequeMoney", 3);
-                        String commandToExecute = "discordsrv broadcast #" + Config.getConfig().getString(Config.ChequeMoney_discordnb) + " :red_square: 使用遊戲幣支票 " + player.getName() + ", " + value; // 替换为你想要执行的命令
+                        cooldown.setCooldown("ChequeHub", 5);
+                        String commandToExecute = "discordsrv broadcast #" + Config.getConfig().getString(Config.ChequeHub_discordnb) + " :red_square: 使用幻幣支票 " + player.getName() + ", " + value; // 替换为你想要执行的命令
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commandToExecute);
                     }else {
-                        cooldown.sendActionBar(player,Config.getConfig().getString(Config.ChequeExp_message_cooldown));
+                        cooldown.sendActionBar(player,Config.getConfig().getString(Config.ChequeHub_message_cooldown));
                     }
                 }
             }

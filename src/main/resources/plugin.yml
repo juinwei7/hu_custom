@@ -26,6 +26,9 @@ commands:
   chequeexp:
     aliases:
       - chequeexp
+  chequehub:
+    aliases:
+      - chequehub
   bind:
     aliases:
       - bind
@@ -47,5 +50,8 @@ commands:
   buffmenu:
     aliases:
       - buffmenu
+  cmd_playerlist:
+    aliases:
+      - cmd_playerlist
 
 

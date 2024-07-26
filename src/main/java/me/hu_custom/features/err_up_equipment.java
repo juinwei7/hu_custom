@@ -17,6 +17,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 
 public class err_up_equipment implements Listener {
+    /*
+    防止玩家隨意更動物品
+    鐵砧 等等
+     */
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         Inventory clickedInventory = event.getClickedInventory();

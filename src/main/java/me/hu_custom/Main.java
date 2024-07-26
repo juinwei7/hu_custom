@@ -6,11 +6,13 @@ import me.hu_custom.DataBase.DataBase;
 import me.hu_custom.Hook.PlaceholderUtil;
 import me.hu_custom.command.*;
 import me.hu_custom.command.Cheque.ChequeExp;
+import me.hu_custom.command.Cheque.ChequeHub;
 import me.hu_custom.command.Cheque.ChequeMoney;
 import me.hu_custom.features.*;
 import me.hu_custom.features.Resource;
 import me.hu_custom.features.Safari.SafariNetListener;
 import me.hu_custom.util.Buff;
+import me.hu_custom.util.Cmd_PlayeyList;
 import me.hu_custom.util.Config;
 import me.hu_custom.util.WarpItem;
 import net.milkbowl.vault.economy.Economy;
@@ -43,6 +45,8 @@ public final class Main extends JavaPlugin {
         Config.loadConfig();
         WarpItem.loadWarpitem();
         Buff.loadBuff();
+        Cmd_PlayeyList.loadPlayer_List();
+
         dataBase = new DataBase(getConfig());
         System.out.println("hu_cou 啟動成功");
 
@@ -67,6 +71,7 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new NoPlace_haslore(), this);
         getServer().getPluginManager().registerEvents(new ChequeMoney(), this);
         getServer().getPluginManager().registerEvents(new ChequeExp(), this);
+        getServer().getPluginManager().registerEvents(new ChequeHub(), this);
         getServer().getPluginManager().registerEvents(new SHIFT_F(), this);
         getServer().getPluginManager().registerEvents(new EXP_LIMIT(), this);
         getServer().getPluginManager().registerEvents(new TaxCommand(), this);
@@ -77,6 +82,7 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new check_perr(), this);
         getServer().getPluginManager().registerEvents(new BossTime(), this);
         getServer().getPluginManager().registerEvents(new BuffCommand(), this);
+        getServer().getPluginManager().registerEvents(new cmd_playerlist(), this);
         getServer().getPluginManager().registerEvents(new sx_bag_perr(), this);
 
 
@@ -89,6 +95,7 @@ public final class Main extends JavaPlugin {
         getCommand("mry").setExecutor(new marry());
         getCommand("chequemoney").setExecutor(new ChequeMoney());
         getCommand("chequeexp").setExecutor(new ChequeExp());
+        getCommand("chequehub").setExecutor(new ChequeHub());
         getCommand("bind").setExecutor(new Bind());
         getCommand("unbind").setExecutor(new Bind());
         getCommand("dr").setExecutor(new NO_Drop(inst));
@@ -96,6 +103,7 @@ public final class Main extends JavaPlugin {
         getCommand("sxbagkey").setExecutor(new SxbagkeyCommand());
         getCommand("taxcheck").setExecutor(new TaxCommand());
         getCommand("buffmenu").setExecutor(new BuffCommand());
+        getCommand("cmd_playerlist").setExecutor(new cmd_playerlist());
 
         if (!setupEconomy()) {
             getLogger().severe("Vault插件未找到，禁用插件！");

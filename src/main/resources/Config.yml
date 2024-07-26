@@ -108,7 +108,7 @@ BossTimeing:
 ChequeMoney:
   enabled: true
   discordnb: "1172813953013907506"
-  ChequeMoney_perr: chequemoney.use
+  Cheque_perr: chequemoney.use
   message:
     noperr: "§c您沒有使用權限"
     tointerror: "§c請重新輸入，請輸入整數"
@@ -125,11 +125,11 @@ ChequeMoney:
       - '§e➽ §f遊戲幣價值: %Money_value%'
       - ''
       - '§e➽ §7生成時間: %time%'
-      - '§e➽ §7到期時間: %over_time%'
+      - '§e➽ §7清除時間: %over_time%'
 ChequeExp:
   enabled: true
   discordnb: "1172813953013907506"
-  ChequeExp_perr: chequeexp.use
+  Cheque_perr: chequeexp.use
   message:
     noperr: "§c您沒有使用權限"
     tointerror: "§c請重新輸入，請輸入整數"
@@ -146,5 +146,31 @@ ChequeExp:
       - '§e➽ §f經驗價值: %exp_value%'
       - ''
       - '§e➽ §7生成時間: %time%'
-      - '§e➽ §7到期時間: %over_time%'
+      - '§e➽ §7清除時間: %over_time%'
+
+ChequeHub:
+  enabled: true
+  discordnb: "1259503802348732517"
+  Cheque_perr: chequehub.use
+  message:
+    noperr: "§c您沒有使用權限"
+    tointerror: "§c請重新輸入，請輸入整數"
+    is_10multiple: "§c請重新輸入，必須為10的倍數 且 大於 100 小於 5000"
+    nomoney: "§c幻幣餘額不足，請從新輸入"
+    bag_max: "§c您背包已滿，無法製作實體卷。"
+    success: "§a成功領取支票"
+    cooldown: "§a物品冷卻中請稍後"
+  chequeitem:
+    name: "§a幻幣支票 ➜ ✡%hub_value%"
+    lore:
+      - "§8--------- §8《§f物品介紹§8》---------"
+      - '§e➽ §7物品類型: 消耗品'
+      - ''
+      - '§e➽ §f製成玩家: %player%'
+      - '§e➽ §f幻幣價值: %hub_value%'
+      - ''
+      - '§e➽ §f兌換序號: %hub_number%'
+      - ''
+      - '§e➽ §7生成時間: %time%'
+      - '§e➽ §7清除時間: %over_time%'
 

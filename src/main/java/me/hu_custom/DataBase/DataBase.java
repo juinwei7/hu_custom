@@ -300,18 +300,25 @@ public class DataBase {
         return ans;  // 返回从数据库中检索到的数据
     }
 
+
+    /*--------------------------------------------------
+                     新增DataBase
+     --------------------------------------------------*/
     private void createTable() {
         String query = "CREATE TABLE IF NOT EXISTS `bosstime` (timeboss VARCHAR(36) PRIMARY KEY, expiretime TIMESTAMP);";
         String taxbase = "CREATE TABLE IF NOT EXISTS `taxplayer` (uuid VARCHAR(36) PRIMARY KEY, name VARCHAR(36), taxmoney VARCHAR(36), expiretime TIMESTAMP);";
         String chequemoney = "CREATE TABLE IF NOT EXISTS `chequemoney` (identification VARCHAR(36) PRIMARY KEY, cheque_money VARCHAR(36), name VARCHAR(36), name_time TIMESTAMP, name_use VARCHAR(36), name_use_time TIMESTAMP);";
+        String chequehub = "CREATE TABLE IF NOT EXISTS `chequehub` (identification VARCHAR(36) PRIMARY KEY, cheque_money VARCHAR(36), name VARCHAR(36), name_time TIMESTAMP, name_use VARCHAR(36), name_use_time TIMESTAMP);";
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(query);
             PreparedStatement taxstatement = connection.prepareStatement(taxbase);
             PreparedStatement chequemoneyment = connection.prepareStatement(chequemoney);
+            PreparedStatement chequehubment = connection.prepareStatement(chequehub);
 
             statement.executeUpdate();
             taxstatement.executeUpdate();
             chequemoneyment.executeUpdate();
+            chequehubment.executeUpdate();
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
