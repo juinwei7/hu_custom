@@ -1,0 +1,60 @@
+GUINAME: "            &1BUFF個人加成"
+
+BUFF_ITEM:
+  NAME: "§f〔 BUFF說明 〕"
+  LORE:
+    - '§c點擊即購買，不可退款'
+    - ''
+    - '§7VIP優惠 ->'
+    - '§7 VIP5 7折 ♦ VIP7 5折'
+    - '§7 VIP6 6折 ♦ VIP8 4折'
+    - ''
+    - '§e訂閱說明➜'
+    - '§e 訂閱後即可生效，每次登入時即會自動開啟BUFF效果'
+
+PERMISSTONS:
+  USE: "buff.menu.use"
+  # 設定 buff.menu.VIP1
+  VIP:
+    DEFAULT: 1
+    VIP5: 0.7
+    VIP6: 0.6
+    VIP7: 0.5
+    VIP8: 0.4
+
+BUFF:
+  - 'amethyst_shard,2001,加速,SPEED,1,300,20000' #迅捷
+  - 'amethyst_shard,2002,挖掘加速,FAST_DIGGING,1,300,20000' #挖掘加速
+  - 'amethyst_shard,2004,跳躍提升,JUMP,1,300,20000' #跳躍提升
+  - 'amethyst_shard,2005,水下呼吸,WATER_BREATHING,1,300,20000' #水下呼吸
+  - 'amethyst_shard,2006,隱形,INVISIBILITY,1,300,20000' #隱形
+  - 'amethyst_shard,2007,夜視,NIGHT_VISION,1,300,20000' #夜視
+  - 'amethyst_shard,2008,發光,GLOWING,1,300,20000' #發光
+  - 'amethyst_shard,2009,緩降,SLOW_FALLING,1,300,20000' #緩降
+  - 'amethyst_shard,2003,力量,INCREASE_DAMAGE,1,300,20000' #力量
+
+  - 'amethyst_shard,2001,加速 II,SPEED,2,500,50000' #迅捷
+  - 'amethyst_shard,2002,挖掘加速 II,FAST_DIGGING,2,600,50000' #挖掘加速
+  - 'amethyst_shard,2004,跳躍提升 II,JUMP,2,600,50000' #跳躍提升
+  - 'amethyst_shard,2005,水下呼吸 II,WATER_BREATHING,2,600,50000' #水下呼吸
+  - 'amethyst_shard,2006,隱形 II,INVISIBILITY,2,600,50000' #隱形
+  - 'amethyst_shard,2007,夜視 II,NIGHT_VISION,2,600,50000' #夜視
+  - 'amethyst_shard,2008,發光 II,GLOWING,2,600,50000' #發光
+  - 'amethyst_shard,2009,緩降 II,SLOW_FALLING,2,600,50000' #緩降
+  - 'amethyst_shard,2003,力量 II,INCREASE_DAMAGE,2,500,50000' #力量
+
+  - 'amethyst_shard,2001,加速 III,SPEED,3,800,80000' #迅捷
+  - 'amethyst_shard,2002,挖掘加速 III,FAST_DIGGING,3,1800,80000' #挖掘加速
+  - 'amethyst_shard,2004,跳躍提升 III,JUMP,3,1800,80000' #跳躍提升
+  - 'amethyst_shard,2005,水下呼吸 III,WATER_BREATHING,3,1800,80000' #水下呼吸
+  - 'amethyst_shard,2006,隱形 III,INVISIBILITY,3,1800,80000' #隱形
+  - 'amethyst_shard,2007,夜視 III,NIGHT_VISION,3,1800,80000' #夜視
+  - 'amethyst_shard,2008,發光 III,GLOWING,3,1800,80000' #發光
+  - 'amethyst_shard,2009,緩降 III,SLOW_FALLING,3,1800,80000' #緩降
+  - 'amethyst_shard,2003,力量 III,INCREASE_DAMAGE,3,800,80000' #力量
+
+BUFF_SUB:
+  - 'amethyst_shard,2002,挖掘加速 III,FAST_DIGGING,3,12,380000' #挖掘加速
+  - 'amethyst_shard,2005,水下呼吸 III,WATER_BREATHING,3,12,380000' #水下呼吸
+  - 'amethyst_shard,2007,夜視 III,NIGHT_VISION,3,12,380000' #夜視
+  - 'amethyst_shard,2008,發光 III,GLOWING,3,12,380000' #發光

@@ -1,0 +1,4 @@
+command: "money give %player% 50000"
+player_list:
+  - 'AA'
+  - 'BB'
