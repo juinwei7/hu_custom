@@ -100,6 +100,13 @@ public class Config {
     public static final String ChequeHub_chequeitem_name = "ChequeHub.chequeitem.name";
     public static final String ChequeHub_chequeitem_lore = "ChequeHub.chequeitem.lore";
 
+    //堆疊的不死圖藤
+    public static final String Totem_Overlay_nbt = "Totem_Overlay.nbt";
+    public static final String Totem_Overlay_name = "Totem_Overlay.name";
+    public static final String Totem_Overlay_model = "Totem_Overlay.model";
+    public static final String Totem_Overlay_lore = "Totem_Overlay.lore";
+
+
 
     @Getter
     private static YamlConfiguration config;
@@ -122,6 +129,9 @@ public class Config {
     private static List<String> BossTimeing_SpawnerName;
     @Getter
     private static List<String> BossTimeing_TimeCooldown;
+
+    @Getter
+    private static List<String> Totem_Overlay_lore_list;
 
     @Getter
     private static boolean newplayerperr_on;
@@ -176,5 +186,6 @@ public class Config {
         TAX_moneylist = config.getStringList(TAX_money_list);
         BossTimeing_TimeCooldown = config.getStringList(BossTimeing_TimeCooldown_list);
         BossTimeing_SpawnerName = config.getStringList(BossTimeing_SpawnerName_list);
+        Totem_Overlay_lore_list = config.getStringList(Totem_Overlay_lore);
     }
 }

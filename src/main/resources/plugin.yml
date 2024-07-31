@@ -53,5 +53,8 @@ commands:
   cmd_playerlist:
     aliases:
       - cmd_playerlist
+  autosell:
+    aliases:
+      - autosell
 
 

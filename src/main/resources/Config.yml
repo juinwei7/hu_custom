@@ -174,3 +174,13 @@ ChequeHub:
       - '§e➽ §7生成時間: %time%'
       - '§e➽ §7清除時間: %over_time%'
 
+Totem_Overlay:
+  nbt: huan,stacked_totem
+  name: '&#ffc342堆疊的不死圖騰 &fPlus'
+  model: 33
+  lore:
+    - ''
+    - '&7› 自動堆疊的不死圖騰'
+    - '&7› 當背包中的不死圖騰消耗後'
+    - '&7> 會自動從堆疊的不死圖騰'
+    - '&7> 生成新的原版不死圖藤。'

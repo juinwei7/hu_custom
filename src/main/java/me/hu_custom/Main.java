@@ -19,9 +19,12 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 
 
 public final class Main extends JavaPlugin {
+
+    private BukkitTask totemTask;
 
     public static DataBase dataBase = null;
 
@@ -49,6 +52,8 @@ public final class Main extends JavaPlugin {
 
         dataBase = new DataBase(getConfig());
         System.out.println("hu_cou 啟動成功");
+
+        startTotemTask(); //加載疊加不死圖騰
 
         if (hasplugin("Residence")) {
             SafariNetListener safarinetListener = new SafariNetListener();
@@ -84,6 +89,8 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new BuffCommand(), this);
         getServer().getPluginManager().registerEvents(new cmd_playerlist(), this);
         getServer().getPluginManager().registerEvents(new sx_bag_perr(), this);
+        getServer().getPluginManager().registerEvents(new Get_Drop(), this);
+        getServer().getPluginManager().registerEvents(new Totem_Overlay(), this);
 
 
 
@@ -104,6 +111,7 @@ public final class Main extends JavaPlugin {
         getCommand("taxcheck").setExecutor(new TaxCommand());
         getCommand("buffmenu").setExecutor(new BuffCommand());
         getCommand("cmd_playerlist").setExecutor(new cmd_playerlist());
+        getCommand("autosell").setExecutor(new Get_Drop());
 
         if (!setupEconomy()) {
             getLogger().severe("Vault插件未找到，禁用插件！");
@@ -125,6 +133,9 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (totemTask != null && !totemTask.isCancelled()){
+            totemTask.cancel();
+        }
         System.out.println("hu_cou 關閉");
     }
 
@@ -144,6 +155,8 @@ public final class Main extends JavaPlugin {
         return getServer().getPluginManager().getPlugin(plugin) != null;
     }
 
-
+    private void startTotemTask() { //不死圖藤
+        totemTask = new Totem_Overlay.TotemTask().runTaskTimer(this, 0, 1L);
+    }
 
 }
